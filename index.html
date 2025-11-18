@@ -2,927 +2,1007 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <!-- Wajib untuk tampilan seluler/mobile-first dan fluid width -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASKAB PSSI PENTAWAI</title>
-    <!-- Load Tailwind CSS -->
+    <title>ASKAB PSSI MENTAWAI</title>
+    <!-- Load Tailwind CSS untuk styling yang cepat dan elegan -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configure Tailwind for mobile-first design -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        
+        /* Custom styles untuk tampilan mobile-first yang elegan */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f7f7f7;
-            padding-bottom: 64px; /* Space for fixed bottom navigation */
-            max-width: 640px; /* Force mobile constraint for larger screens */
-            margin: 0 auto;
+            background-color: #f8f9fa; /* Latar belakang sangat terang */
         }
-
-        /* Custom scrollbar for elegance */
-        ::-webkit-scrollbar {
-            width: 4px;
+        .header-shadow {
+            /* Bayangan halus untuk header */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1e40af;
-            border-radius: 10px;
+        .card-shadow {
+            /* Bayangan untuk kartu */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
         }
-        
+        .card-shadow:active {
+            transform: scale(0.98);
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+        }
+        /* Style untuk navigasi bawah yang tetap */
+        #bottom-nav {
+            z-index: 1000;
+            height: 60px;
+            /* Pastikan navigasi selalu di tengah pada layar yang lebih lebar */
+            max-width: 480px; 
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Warna aktif PSSI Blue */
+        .pssi-blue {
+            color: #007bff;
+        }
+        .bg-pssi-blue {
+            background-color: #007bff;
+        }
+        .border-pssi-blue {
+            border-color: #007bff;
+        }
         .nav-active {
-            color: #ffffff; /* White text for active icon/text */
-            background-color: #1e40af; /* Blue background for active icon */
+            color: #007bff; 
+            border-top: 2px solid #007bff;
+            font-weight: 600;
+        }
+        /* Pastikan konten utama memiliki padding bawah agar tidak tertutup nav */
+        #content {
+            padding-bottom: 70px;
+            min-height: calc(100vh - 120px);
+        }
+        /* Slider transition */
+        #slider-track {
+            transition: transform 0.5s ease-in-out;
         }
     </style>
+    <script>
+        // Konfigurasi Tailwind untuk mempermudah penggunaan warna PSSI
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'pssi-blue': '#007bff',
+                        'pssi-dark': '#0056b3',
+                    },
+                    borderRadius: {
+                        'xl': '0.75rem',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="mx-auto min-h-screen">
+<body class="bg-gray-50">
+    <!-- Kontainer utama, batasi lebar agar terlihat seperti tampilan seluler -->
+    <div id="app" class="max-w-md mx-auto min-h-screen bg-white shadow-xl">
+        
+        <!-- Header: Posisi tetap di atas -->
+        <header id="app-header" class="sticky top-0 bg-white p-3 header-shadow z-50"></header>
 
-    <!-- Konten Utama (Main Content) -->
-    <div id="app-content" class="pb-4">
-        <!-- Konten akan dimuat di sini oleh JavaScript -->
+        <!-- Area Konten Utama -->
+        <main id="content" class="p-3">
+            <!-- Konten halaman akan dirender di sini -->
+        </main>
+
+        <!-- Bottom Navigation (Point 1) -->
+        <nav id="bottom-nav" class="fixed bottom-0 bg-white border-t border-gray-200 flex justify-around items-center">
+            <a href="#home" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pssi-blue transition-colors text-xs" data-page="home">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l-2-2m0 0l-7-7-7 7M19 10v10a1 1 0 01-1 1h-3m-10 0h10v-5a1 1 0 00-1-1H7a1 1 0 00-1 1v5z" /></svg>
+                <span>Home</span>
+            </a>
+            <a href="#klasemen" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pssi-blue transition-colors text-xs" data-page="klasemen">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v14.5l-12 3z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19c-3.153 0-5.714-2.5-5.714-5.5S5.847 8 9 8s5.714 2.5 5.714 5.5-2.561 5.5-5.714 5.5z" /></svg>
+                <span>Klasemen</span>
+            </a>
+            <a href="#klub" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pssi-blue transition-colors text-xs" data-page="klub">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h-5v-5a3 3 0 00-6 0v5H4a2 2 0 01-2-2V7a2 2 0 012-2h16a2 2 0 012 2v11a2 2 0 01-2 2z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <span>Klub</span>
+            </a>
+            <a href="#tentang" class="nav-item flex flex-col items-center p-2 text-gray-500 hover:text-pssi-blue transition-colors text-xs" data-page="tentang">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Tentang</span>
+            </a>
+        </nav>
     </div>
 
-    <!-- Modal Dialog untuk Berita -->
-    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm z-50 hidden justify-center items-start pt-8 p-4 overflow-y-auto">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-sm overflow-hidden transform transition-all duration-300 scale-95 opacity-0" id="news-modal-content">
-            <!-- Modal Header -->
-            <div class="p-4 flex justify-between items-center border-b border-gray-100">
-                <h3 class="text-xl font-bold text-gray-800">Detail Berita</h3>
-                <button onclick="closeNewsModal()" class="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <!-- Modal Body (Diisi oleh JS) -->
-            <div id="modal-body" class="p-4 text-gray-700 space-y-4">
-                <!-- Data berita akan dimuat di sini -->
+    <!-- Modal untuk Detail Berita (News Detail Modal) -->
+    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-[9999] items-start justify-center p-4 overflow-y-auto" onclick="closeNewsModal()">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mt-4 md:mt-8 relative" onclick="event.stopPropagation()">
+            <button class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 z-50 p-2 bg-gray-100 rounded-full" onclick="closeNewsModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+            <div id="modal-content" class="p-5 pt-10">
+                <!-- Konten berita disuntikkan di sini -->
             </div>
         </div>
     </div>
 
-    <!-- Navigasi Bawah Tetap (Fixed Bottom Navigation) -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-sm mx-auto bg-white border-t border-gray-200 shadow-xl z-40 rounded-t-xl overflow-hidden">
-        <div class="flex justify-around items-center h-16">
-            <button id="nav-home" onclick="showView('home', this)" class="flex flex-col items-center justify-center flex-1 p-2 text-xs font-medium text-gray-500 hover:text-blue-700 transition duration-150">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-10v10a1 1 0 001 1h3m-6-10v8a1 1 0 01-1 1h-6a1 1 0 01-1-1v-8"></path></svg>
-                Home
+    <!-- Modal untuk Detail Klub (Club Detail Modal) -->
+    <div id="club-modal" class="fixed inset-0 bg-black bg-opacity-75 hidden z-[9999] items-start justify-center p-4 overflow-y-auto" onclick="closeClubModal()">
+        <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full mt-4 md:mt-8 relative" onclick="event.stopPropagation()">
+            <button class="absolute top-3 right-3 text-gray-600 hover:text-gray-900 z-50 p-2 bg-gray-100 rounded-full" onclick="closeClubModal()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <button id="nav-klasemen" onclick="showView('klasemen', this)" class="flex flex-col items-center justify-center flex-1 p-2 text-xs font-medium text-gray-500 hover:text-blue-700 transition duration-150">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l-2 2-2-2m13-1l-2 2-2-2m5 20h-8m8-4h-8m8-4h-8m8-4h-8"></path></svg>
-                Klasemen
-            </button>
-            <button id="nav-klub" onclick="showView('klub', this)" class="flex flex-col items-center justify-center flex-1 p-2 text-xs font-medium text-gray-500 hover:text-blue-700 transition duration-150">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.247m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18s-3.332.477-4.5 1.247" /></svg>
-                Klub
-            </button>
-            <button id="nav-info" onclick="showView('info', this)" class="flex flex-col items-center justify-center flex-1 p-2 text-xs font-medium text-gray-500 hover:text-blue-700 transition duration-150">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                Info
-            </button>
-            <button id="nav-tentang" onclick="showView('tentang', this)" class="flex flex-col items-center justify-center flex-1 p-2 text-xs font-medium text-gray-500 hover:text-blue-700 transition duration-150">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 10h5m-11 5h5m-5 5h5M7 10h.01M7 15h.01M7 20h.01M3 21h18M3 5h18a2 2 0 012 2v14a2 2 0 01-2 2H3a2 2 0 01-2-2V7a2 2 0 012-2z" /></svg>
-                Tentang
-            </button>
+            <div id="club-modal-content" class="p-5 pt-10">
+                <!-- Konten detail klub disuntikkan di sini -->
+            </div>
         </div>
-    </nav>
+    </div>
 
     <script>
-        // Data dari "sheets" pengguna (dikonversi ke JavaScript Object)
-        const APP_DATA = {
+        // Data yang telah diolah dari 'sheet' input pengguna
+        const rawData = {
             "kepala_halaman": {
-                "logo_pssi": "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
+                "logo_pssi": "https://i.ibb.co/1t4P2rN5/IMG-20251112-015057.jpg",
                 "Judul_kepala": "ASKAB PSSI PENTAWAI",
-                "logo_askab": "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg"
+                "logo_askab": "https://i.ibb.co/TQ2hm2h/IMG-20251112-015234.jpg"
             },
             "berita": [
-                {
-                    "id_berita": "BRT-002",
-                    "tanggal": "20/10/2025", 
-                    "Judul_berita": "Launching Liga Mentawai Premier League",
-                    "isi_berita": "Kegiatan peluncuran Liga Mentawai Premier League berjalan sukses. Acara dihadiri oleh seluruh manajer klub dan disaksikan oleh ratusan pendukung.",
-                    "gambar_1": "https://i.ibb.co.com/HM79Rd6/IMG-20251112-015205.jpg",
-                    "gambar_2": "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg",
-                    "gambar_3": "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg"
-                },
-                {
-                    "id_berita": "BRT-001",
-                    "tanggal": "18/10/2025", 
-                    "Judul_berita": "Aksi Solidaritas Pemuda Sepakbola",
-                    "isi_berita": "Dalam semangat kebersamaan, para pemain muda dari berbagai klub Mentawai mengadakan aksi bersih-bersih stadion sebagai bentuk solidaritas dan kecintaan terhadap fasilitas olahraga lokal. Kegiatan ini diharapkan dapat meningkatkan kesadaran akan pentingnya menjaga kebersihan.",
-                    "gambar_1": "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
-                    "gambar_2": "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg",
-                    "gambar_3": "https://i.ibb.co.com/HM79Rd6/IMG-20251112-015205.jpg"
-                }
+                { id_berita: 'BRT-001', tanggal: '18/10/2025', Judul_berita: 'ffff', isi_berita: 'ddddddd', gambar_1: 'https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg', gambar_2: 'https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg', gambar_3: 'https://i.ibb.co.com/HM79Rd6/IMG-20251112-015205.jpg' }
             ],
             "match": [
-                // Future Match (MATCH-003)
-                {
-                    "id_match": "MATCH-003",
-                    "id_kompetisi: "COMP-6231",
-                    "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-                    "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
-                    "tanggal_match": "12/01/2025", 
-                    "jam": "19:00",
-                    "lokasi": "lapangan desa sipora jaya",
-                    "nama_klub_home": "MAICON FC",
-                    "logo_klub_home": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-                    "goal_home": null, // Belum bertanding
-                    "goal_away": null,
-                    "poin_home": 0,
-                    "poin_away": 0,
-                    "keterangan_goal_home": "dghfdshjfs",
-                    "keterangan_goal_away": "dghfhjhmjdshjfs",
-                    "kartu_merah_home": 0,
-                    "kartu_merah_away": 1,
-                    "id_klub_away": "APM-005",
-                    "nama_klub_away": "PERSIKOPA",
-                    "logo_klub_away": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-                },
-                // Past Match (MATCH-002) - Draw
-                {
-                    "id_match": "MATCH-002",
-                    "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-                    "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
-                    "tanggal_match": "11/10/2025", 
-                    "jam": "15:30",
-                    "lokasi": "lapangan desa sipora jaya",
-                    "nama_klub_home": "SATRIA MUDA",
-                    "logo_klub_home": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-                    "goal_home": 2,
-                    "goal_away": 2,
-                    "poin_home": 1,
-                    "poin_away": 1,
-                    "id_klub_away": "APM-004",
-                    "nama_klub_away": "SIKABAU FC",
-                    "logo_klub_away": "https://placehold.co.com/100x100/b91c1c/ffffff?text=SK",
-                },
-                // Past Match (MATCH-001) - Win Away
-                {
-                    "id_match": "MATCH-001",
-                    "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-                    "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
-                    "tanggal_match": "11/22/2025", 
-                    "jam": "15:30",
-                    "lokasi": "lapangan desa sipora jaya",
-                    "nama_klub_home": "MAICON FC",
-                    "logo_klub_home": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-                    "goal_home": 1,
-                    "goal_away": 3,
-                    "poin_home": 0,
-                    "poin_away": 3,
-                    "id_klub_away": "APM-001",
-                    "nama_klub_away": "HARIMAU PUTIH",
-                    "logo_klub_away": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-                }
+                { id_match: 'MATCH-001', id_kompetisi: 'COMP-6231', nama_kompetisi: 'MENTAWAI PREMIER LEAGUE 2025', babak_pertandingan: 'Babak Fase Group Wilayah Sipora', tanggal_match: '11/22/2025', jam: '15:30', lokasi: 'lapangan desa sipora jaya', id_klub_home: 'APM-001', nama_klub_home: 'MAICON FC', logo_klub_home: 'https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg', goal_home: 1, keterangan_goal_home: 'rima78', kartu_merah_home: 0, keterangan_kartu_merah_home: '-', kartu_kuning_home: 1, keterangan_kartu_kuning_home: '-', poin_home: 0, poin_away: 3, keterangan_kartu_kuning_away: '-', kartu_kuning_away: 0, keterangan_kartu_merah_away: '-', kartu_merah_away: 0, keterangan_goal_away: 'rita,yani,andt', goal_away: 3, id_klub_away: 'APM-001', nama_klub_away: 'MAICON FC', logo_klub_away: 'https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg' }
             ],
-            "klub_kami": {
-                "id_klub": "APM-001",
-                "nama_klub": "MAICON FC",
-                "nama_manajer": "AFRI SURYANTO S,AP",
-                "no_telp_klub": "82283364484",
-                "alamat_klub": "Desa Sido Makmur, sipora utara",
-                "logo_klub": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
-            },
+            "klub_kami": [
+                { id_klub: 'APM-001', nama_klub: 'MAICON FC', nama_manajer: 'AFRI SURYANTO S,AP', no_telp_klub: '82283364484', alamat_klub: 'Desa Sido Makmur, sipora utara', logo_klub: 'https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg' }
+            ],
             "pemain": [
-                {
-                    "id_pemain": "1111111111111111",
-                    "id_klub": "APM-001",
-                    "nama_pemain": "Joko Susilo",
-                    "tanggal_lahir": "2018-10-22",
-                    "no_punggung": "43",
-                    "posisi": "Kiper",
-                    "nama_punggung": "J. SUSILO",
-                    "pas_photo_pemain": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
-                },
-                {
-                    "id_pemain": "2222222222222222",
-                    "id_klub": "APM-001",
-                    "nama_pemain": "Rima",
-                    "tanggal_lahir": "2000-05-15",
-                    "no_punggung": "10",
-                    "posisi": "Penyerang",
-                    "nama_punggung": "RIMA78",
-                    "pas_photo_pemain": "https://i.ibb.co.com/Vc0tD99W/1d61fd9785fb.png"
-                }
+                { id_pemain: '1111111111111111', id_klub: 'APM-001', nama_pemain: 'sdfgcegdfg', tanggal_lahir: '2018-10-22', no_punggung: 43, posisi: 'Kiper', nama_punggung: 'cedfds', pas_photo_pemain: 'https://i.ibb.co.com/Vc0tD99W/1d61fd9785fb.png' }
             ],
             "official": [
-                {
-                    "id_official": "1111111111111111",
-                    "id_klub": "APM-001",
-                    "nama_official": "YASMIN",
-                    "tanggal_lahir": "2018-10-22",
-                    "jabatan": "Pelatih",
-                    "pas_photo_official": "https://i.ibb.co.com/Vc0tD99W/1d61fd9785fb.png"
-                }
+                { id_official: '1111111111111111', id_klub: 'APM-001', nama_official: 'YASMIN', tanggal_lahir: '2018-10-22', jabatan: 'Pelatih', pas_photo_official: 'https://i.ibb.co.com/Vc0tD99W/1d61fd9785fb.png' }
             ],
-            "kompetisi": {
-                "id_kompetisi": "COMP-6231",
-                "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-                "umur_maksimal": "80",
-                "tanggal_awal_pendaftaran": "2025-11-17",
-                "tanggal_akhir_pendaftaran": "2025-12-01",
-                "url_logo_liga": "https://i.ibb.co.com/whSSR80B/b875b5043f80.png",
-                "deskripsi": "KOMPETISI LIGA ASKAB MENTAWAI"
-            },
+            "list_kompetisi": [
+                { id_kompetisi: 'COMP-6231', nama_kompetisi: 'MENTAWAI PREMIER LEAGUE 2025', umur_maksimal: 80, tanggal_awal_pendaftaran: '2025-11-17', tanggal_akhir_pendaftaran: '2025-12-01', url_logo_liga: 'https://i.ibb.co.com/whSSR80B/b875b5043f80.png', deskripsi: 'KOMPETISI LIGA ASKAB MENTAWAI' }
+            ],
             "slide": [
-                { "banner_1": "https://i.ibb.co.com/7xZwq739/IMG-20251112-004726.jpg" },
-                { "banner_2": "https://i.ibb.co.com/Rkgtqd8L/1762812029886.jpg" },
-                { "banner_3": "https://i.ibb.co.com/23z5JLwp/1762812023240.jpg" }
+                { banner_1: 'https://i.ibb.co.com/7xZwq739/IMG-20251112-004726.jpg' },
+                { banner_2: 'https://i.ibb.co.com/Rkgtqd8L/1762812029886.jpg' },
+                { banner_3: 'https://i.ibb.co.com/23z5JLwp/1762812023240.jpg' }
             ],
             "tentang": {
-                "nama_organisasi": "ASOSIASI KABUPATE PSSI KEPULAUAN MENTAWAI",
-                "tanggal_berdiri": "03-11-2020",
-                "visi": "hgsfhdsfsj",
-                "misi": "fgdgs",
-                "ketua": "H. Safawi M.Phil",
-                "wakil_ketua": "Syahroni Wardoyo S.Sos",
-                "sekretaris": "Rinaldi Kaslan S.Pd",
-                "bendahara": "Eranita Matondang S.E",
-                "humas": "Demian Zega S.sos",
-                "media": "Ardian Humaiza S.Kom"
+                "nama_organisasi": "ASOSIASI KABUPATE PSSI KEPULAUAN MENTAWAI", "tanggal_berdiri": "03/11/2020", "visi": "hgsfhdsfsj", "misi": "fgdgs", "ketua": "H. Safawi M.Phil", "wakil_ketua": "Syahroni Wardoyo S.Sos", "sekretaris": "Rinaldi Kaslan S.Pd", "bendahara": "Eranita Matondang S.E", "humas": "Demian Zega S.sos", "media": "Ardian Humaiza S.Kom"
             },
             "login_admin": "https://facebook.com"
         };
+
+        // Mengolah data slide menjadi array URL
+        const slides = rawData.slide.map(item => Object.values(item)[0]);
+
+        // Fungsi utilitas untuk penanganan gambar dan tanggal
         
-        let currentView = 'home';
-        let slideInterval;
-        let countdownInterval;
+        const getImageUrl = (url) => url || 'https://placehold.co/100x100/A0A0A0/ffffff?text=No+Image';
 
-        // --- UTILITY FUNCTIONS ---
-
-        // Helper untuk menangani error gambar (fast image loading requirement)
-        const handleErrorImage = (img) => {
-            img.onerror = null; // Menghindari loop tak terbatas
-            img.src = "https://placehold.co/40x40/cccccc/333333?text=Logo";
-        }
-        
-        // Helper untuk format tanggal DD/MM/YYYY menjadi objek Date
-        const parseDate = (dateStr) => {
-            if (!dateStr) return null;
-            const parts = dateStr.split('/');
-            // Date(Year, Month(0-11), Day)
-            return new Date(parts[2], parts[0] - 1, parts[1]); 
-        }
-
-        // Helper untuk memotong teks
-        const truncateText = (text, wordCount) => {
-            const words = text.split(/\s+/);
-            if (words.length > wordCount) {
-                return words.slice(0, wordCount).join(' ') + '...';
+        const parseDate = (dateString, withTime = false) => {
+            if (!dateString) return null;
+            
+            // Handle combined date and time string (e.g., '11/22/2025 15:30')
+            if (withTime && dateString.includes(' ')) {
+                const [datePart, timePart] = dateString.split(' ');
+                const [hours, minutes] = timePart.split(':');
+                const date = parseDate(datePart);
+                if (date) {
+                    date.setHours(hours);
+                    date.setMinutes(minutes);
+                    date.setSeconds(0);
+                    return date;
+                }
+                return null;
             }
-            return text;
-        }
 
-        // --- HEADER COMPONENT ---
+            let parts;
+            if (dateString.includes('-')) {
+                // YYYY-MM-DD format (like '2025-11-17')
+                parts = dateString.split('-');
+                return new Date(parts[0], parts[1] - 1, parts[2]);
+            } else if (dateString.includes('/')) {
+                // MM/DD/YYYY format (like '11/22/2025') or DD/MM/YYYY (like '03/11/2020')
+                // Assuming M/D/Y for match dates, D/M/Y for general dates based on typical input conventions.
+                parts = dateString.split('/');
+                if (parts.length === 3) {
+                    // Try to determine if it's MM/DD/YYYY or DD/MM/YYYY
+                    // Based on the 'match' sheet ('11/22/2025'), assuming MM/DD/YYYY for matches, else DD/MM/YYYY.
+                    if (dateString.length === 10 && (dateString.indexOf('11/22') === 0 || dateString.indexOf('10/18') === 0)) { // Simple heuristic for match/news date
+                         return new Date(parts[2], parts[0] - 1, parts[1]); // MM/DD/YYYY
+                    } else {
+                         return new Date(parts[2], parts[1] - 1, parts[0]); // DD/MM/YYYY (default for general info)
+                    }
+                }
+            }
+            return null;
+        };
 
-        function renderHeader(title) {
-            const headerData = APP_DATA.kepala_halaman;
-            return `
-                <div class="fixed top-0 left-0 right-0 max-w-sm mx-auto bg-white shadow-md z-30 p-3 rounded-b-xl border-b border-gray-100">
-                    <div class="flex items-center justify-between">
-                        <!-- Logo PSSI (Kiri) -->
-                        <img src="${headerData.logo_pssi}" 
-                             onerror="handleErrorImage(this)"
-                             alt="Logo PSSI" class="h-10 w-10 object-contain rounded-full border border-gray-200 p-0.5">
-                        
-                        <!-- Judul Kepala (Tengah) -->
-                        <h1 class="text-base font-bold text-center text-blue-800 uppercase tracking-wider mx-2 flex-1 truncate">
-                            ${headerData.Judul_kepala}
-                        </h1>
-                        
-                        <!-- Logo ASKAB (Kanan) -->
-                        <img src="${headerData.logo_askab}" 
-                             onerror="handleErrorImage(this)"
-                             alt="Logo Askab" class="h-10 w-10 object-contain rounded-full border border-gray-200 p-0.5">
-                    </div>
+        const calculateAge = (dateString) => {
+            const birthDate = parseDate(dateString);
+            if (!birthDate || isNaN(birthDate)) return 'N/A';
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            return age >= 0 ? age : 'N/A';
+        };
+
+        const formatDate = (dateString) => {
+            const date = parseDate(dateString);
+            if (!date || isNaN(date)) return dateString;
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        };
+
+        // --- Global State ---
+        let activePage = 'home';
+        let currentDetailView = null; // Stores id_kompetisi or null for Klasemen
+        let currentClubDetail = null; // Stores id_klub or null for Klub
+        let currentKlubTab = 'pemain'; // Default tab for Klub detail
+        let slideInterval;
+        let countdownIntervals = []; // To hold match countdown intervals
+
+        // --- DOM Elements ---
+        const contentEl = document.getElementById('content');
+        const headerEl = document.getElementById('app-header');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        // --- Main App Logic ---
+
+        // 1. Header Renderer (Kepala Halaman)
+        const renderHeader = (title) => {
+            const { logo_pssi, Judul_kepala, logo_askab } = rawData.kepala_halaman;
+            headerEl.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <img src="${getImageUrl(logo_pssi)}" alt="Logo PSSI" class="h-10 w-10 object-contain rounded-full border p-0.5 shadow-sm bg-gray-50" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/40x40?text=PSSI'">
+                    <h1 class="text-xl font-bold text-gray-800 text-center flex-grow mx-2 truncate">${title || Judul_kepala}</h1>
+                    <img src="${getImageUrl(logo_askab)}" alt="Logo ASKAB" class="h-10 w-10 object-contain rounded-full border p-0.5 shadow-sm bg-gray-50" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/40x40?text=ASKAB'">
                 </div>
-                <div class="pt-16"></div> <!-- Padding untuk fixed header -->
             `;
-        }
+        };
 
-        // --- HOME VIEW LOGIC ---
+        // Membersihkan semua interval countdown
+        const clearCountdownIntervals = () => {
+            countdownIntervals.forEach(clearInterval);
+            countdownIntervals = [];
+        };
 
-        function renderHome() {
-            // Sortir berita berdasarkan tanggal terbaru (asumsi DD/MM/YYYY)
-            const sortedBerita = [...APP_DATA.berita].sort((a, b) => {
+        // 2. Navigation Handler (Point 6: Mengelola history)
+        const navigate = (pageHash, forceRender = false) => {
+            const hash = pageHash.replace('#', '');
+            const [page, detailId] = hash.split(':');
+
+            if (activePage === page && !forceRender && currentDetailView === detailId) return;
+
+            // Stop slider and countdown intervals when navigating
+            if (slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
+            clearCountdownIntervals();
+
+            activePage = page;
+            currentDetailView = detailId || null;
+
+            // Update bottom nav active state
+            navItems.forEach(item => {
+                item.classList.remove('nav-active', 'text-pssi-blue');
+                item.classList.add('text-gray-500');
+                if (item.getAttribute('data-page') === page) {
+                    item.classList.add('nav-active', 'text-pssi-blue');
+                    item.classList.remove('text-gray-500');
+                }
+            });
+
+            renderPage(page);
+            window.scrollTo(0, 0);
+        };
+
+        // 3. Page Renderers
+        const renderPage = (page) => {
+            contentEl.innerHTML = ''; // Hapus konten lama
+            renderHeader(rawData.kepala_halaman.Judul_kepala);
+
+            switch (page) {
+                case 'home':
+                    renderHome();
+                    break;
+                case 'klasemen':
+                    if (currentDetailView) {
+                        renderKlasemenDetail(currentDetailView);
+                    } else {
+                        renderKlasemen();
+                    }
+                    break;
+                case 'klub':
+                    renderKlubList(); // Klub detail dibuka via modal
+                    break;
+                case 'tentang':
+                    renderTentang();
+                    break;
+                default:
+                    renderHome();
+            }
+        };
+
+        // --- HOME PAGE (Point 2) ---
+
+        const renderHome = (filter = '') => {
+            // 1. Kolom Pencarian
+            contentEl.innerHTML += `
+                <div class="mb-5">
+                    <input type="text" id="news-search" placeholder="Cari berita..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pssi-blue focus:border-pssi-blue transition duration-150 shadow-sm" oninput="filterNews(this.value)">
+                </div>
+            `;
+
+            // 2. Slider Otomatis
+            const slideItems = slides.map((url, index) => `
+                <div class="swiper-slide w-full flex-shrink-0" data-index="${index}">
+                    <img src="${getImageUrl(url)}" alt="Banner ${index + 1}" class="w-full h-40 object-cover rounded-xl shadow-md bg-gray-200" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x160?text=Gagal+Memuat+Gambar+Slide'">
+                </div>
+            `).join('');
+
+            contentEl.innerHTML += `
+                <h2 class="text-lg font-semibold mb-2 text-gray-700">Galeri Terbaru</h2>
+                <div id="slider-container" class="relative overflow-hidden rounded-xl mb-6 shadow-lg">
+                    <div id="slider-track" class="flex">
+                        ${slideItems}
+                    </div>
+                    <div id="slider-dots" class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2"></div>
+                </div>
+            `;
+
+            // 3. Ringkasan Berita
+            contentEl.innerHTML += `
+                <h2 class="text-lg font-semibold mb-3 text-gray-700 border-t pt-4">Berita Terbaru</h2>
+                <div id="news-list" class="space-y-4"></div>
+            `;
+
+            initSlider();
+            renderNewsList(filter);
+        };
+
+        const initSlider = () => {
+            const track = document.getElementById('slider-track');
+            const dotsContainer = document.getElementById('slider-dots');
+            if (!track || slides.length === 0) return;
+
+            let currentIndex = 0;
+            const slideCount = slides.length;
+
+            const updateSlider = () => {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                updateDots();
+            };
+
+            const updateDots = () => {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < slideCount; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = `h-2 w-2 rounded-full mx-1 transition-all duration-300 ${i === currentIndex ? 'bg-white w-4' : 'bg-gray-400 opacity-70'}`;
+                    dotsContainer.appendChild(dot);
+                }
+            };
+
+            const nextSlide = () => {
+                currentIndex = (currentIndex + 1) % slideCount;
+                updateSlider();
+            };
+
+            updateSlider(); 
+            slideInterval = setInterval(nextSlide, 2000); // Geser setiap 2 detik
+        };
+
+        const filterNews = (filter) => {
+            renderNewsList(filter.toLowerCase());
+        };
+
+        const renderNewsList = (filter) => {
+            const listEl = document.getElementById('news-list');
+            if (!listEl) return;
+
+            const sortedNews = [...rawData.berita].sort((a, b) => {
                 const dateA = parseDate(a.tanggal);
                 const dateB = parseDate(b.tanggal);
-                return dateB - dateA; // Terbaru (B) lebih dulu dari Terlama (A)
+                return dateB - dateA; // Terbaru pertama
             });
 
-            const newsHtml = renderNewsList(sortedBerita);
-
-            return `
-                ${renderHeader('Home')}
-                <div class="p-4 space-y-4">
-                    <!-- Kolom Pencarian -->
-                    <div class="relative">
-                        <input type="text" id="news-search" oninput="filterNews(this.value)" placeholder="Cari berita atau judul..." 
-                               class="w-full p-3 pl-10 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm shadow-sm transition">
-                        <svg class="absolute left-3 top-3.5 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-
-                    <!-- Slide Otomatis (Carousel) -->
-                    <div id="slide-container" class="relative w-full overflow-hidden rounded-xl shadow-lg h-40 bg-gray-200">
-                        <div id="image-slider" class="flex transition-transform duration-500 ease-in-out h-full">
-                            <!-- Slider images will be injected here -->
-                        </div>
-                        <div id="slide-dots" class="absolute bottom-2 left-0 right-0 flex justify-center space-x-2"></div>
-                    </div>
-
-                    <!-- Ringkasan Berita -->
-                    <h2 class="text-lg font-bold text-gray-800 mt-6 border-b pb-2 border-blue-100">Berita Terbaru</h2>
-                    <div id="news-list" class="space-y-3">
-                        ${newsHtml}
-                    </div>
-                </div>
-            `;
-        }
-        
-        function renderSlider() {
-            const slides = APP_DATA.slide.map(s => Object.values(s)[0]);
-            const sliderContainer = document.getElementById('image-slider');
-            const dotsContainer = document.getElementById('slide-dots');
-            if (!sliderContainer || !dotsContainer) return;
-            
-            sliderContainer.innerHTML = slides.map((url, index) => `
-                <div class="w-full flex-shrink-0 h-full">
-                    <img src="${url}" 
-                         onerror="handleErrorImage(this)"
-                         alt="Banner ${index + 1}" class="w-full h-full object-cover">
-                </div>
-            `).join('');
-
-            dotsContainer.innerHTML = slides.map((_, index) => `
-                <span data-index="${index}" class="dot h-2 w-2 bg-white bg-opacity-50 rounded-full transition cursor-pointer" onclick="goToSlide(${index})"></span>
-            `).join('');
-
-            // Inisialisasi slide pertama
-            updateSlide(0);
-        }
-
-        let currentSlideIndex = 0;
-        const slidesCount = APP_DATA.slide.length;
-
-        function updateSlide(index) {
-            const slider = document.getElementById('image-slider');
-            const dots = document.querySelectorAll('#slide-dots .dot');
-            if (!slider || dots.length === 0) return;
-
-            currentSlideIndex = index;
-            slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-
-            dots.forEach((dot, i) => {
-                dot.classList.remove('bg-opacity-100', 'bg-blue-600');
-                dot.classList.add('bg-opacity-50', 'bg-white');
-                if (i === currentSlideIndex) {
-                    dot.classList.add('bg-opacity-100', 'bg-blue-600');
-                }
-            });
-        }
-
-        function nextSlide() {
-            currentSlideIndex = (currentSlideIndex + 1) % slidesCount;
-            updateSlide(currentSlideIndex);
-        }
-
-        function goToSlide(index) {
-            clearInterval(slideInterval);
-            updateSlide(index);
-            slideInterval = setInterval(nextSlide, 2000);
-        }
-
-        function startSlider() {
-            if (slideInterval) clearInterval(slideInterval);
-            slideInterval = setInterval(nextSlide, 2000);
-            renderSlider();
-        }
-        
-        function stopSlider() {
-            if (slideInterval) clearInterval(slideInterval);
-        }
-
-        function renderNewsList(newsArray) {
-            if (newsArray.length === 0) {
-                return `<p class="text-center text-gray-500 py-8">Tidak ada berita yang ditemukan.</p>`;
-            }
-            return newsArray.map(news => `
-                <div class="flex bg-white rounded-xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition duration-300" onclick="openNewsModal('${news.id_berita}')">
-                    <!-- Gambar -->
-                    <div class="w-2/5 flex-shrink-0">
-                        <img src="${news.gambar_1}" 
-                             onerror="handleErrorImage(this)"
-                             alt="${news.Judul_berita}" class="w-full h-28 object-cover">
-                    </div>
-                    <!-- Konten -->
-                    <div class="p-3 w-3/5">
-                        <p class="text-xs text-blue-600 font-semibold mb-1">${news.tanggal}</p>
-                        <h3 class="text-sm font-bold text-gray-800 line-clamp-2 mb-1">${news.Judul_berita}</h3>
-                        <p class="text-xs text-gray-600 line-clamp-3">${truncateText(news.isi_berita, 20)}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function filterNews(searchTerm) {
-            const term = searchTerm.toLowerCase();
-            const filtered = APP_DATA.berita.filter(news => 
-                news.Judul_berita.toLowerCase().includes(term) || 
-                news.isi_berita.toLowerCase().includes(term)
+            const filteredNews = sortedNews.filter(news =>
+                news.Judul_berita.toLowerCase().includes(filter) ||
+                news.isi_berita.toLowerCase().includes(filter)
             );
-            document.getElementById('news-list').innerHTML = renderNewsList(filtered);
-        }
 
-        function openNewsModal(id) {
-            const news = APP_DATA.berita.find(n => n.id_berita === id);
-            if (!news) return;
-
-            const modalBody = document.getElementById('modal-body');
-            modalBody.innerHTML = `
-                <img src="${news.gambar_1}" 
-                     onerror="handleErrorImage(this)"
-                     alt="${news.Judul_berita}" class="w-full h-48 object-cover rounded-lg mb-3">
-                <p class="text-xs text-blue-600 font-semibold">${news.tanggal}</p>
-                <h4 class="text-xl font-extrabold text-gray-900 mb-3">${news.Judul_berita}</h4>
-                <p class="text-sm text-gray-700 whitespace-pre-wrap">${news.isi_berita}</p>
-                <div class="flex flex-wrap gap-2 mt-4">
-                    <img src="${news.gambar_2}" onerror="handleErrorImage(this)" alt="Gambar Pendukung 2" class="h-20 w-auto object-cover rounded-lg">
-                    <img src="${news.gambar_3}" onerror="handleErrorImage(this)" alt="Gambar Pendukung 3" class="h-20 w-auto object-cover rounded-lg">
-                </div>
-            `;
-
-            const modal = document.getElementById('news-modal');
-            const modalContent = document.getElementById('news-modal-content');
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            // Animasi masuk
-            setTimeout(() => {
-                modalContent.classList.remove('scale-95', 'opacity-0');
-                modalContent.classList.add('scale-100', 'opacity-100');
-            }, 50);
-        }
-
-        function closeNewsModal() {
-            const modal = document.getElementById('news-modal');
-            const modalContent = document.getElementById('news-modal-content');
-
-            // Animasi keluar
-            modalContent.classList.remove('scale-100', 'opacity-100');
-            modalContent.classList.add('scale-95', 'opacity-0');
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.getElementById('modal-body').innerHTML = ''; // Clear content
-            }, 300);
-        }
-
-        // --- KLASEMEN VIEW LOGIC ---
-
-        function calculateStandings() {
-            const standings = {};
-            
-            // 1. Ambil semua klub unik dari match data
-            const uniqueClubs = new Set();
-            APP_DATA.match.forEach(m => {
-                uniqueClubs.add(m.nama_klub_home);
-                uniqueClubs.add(m.nama_klub_away);
-            });
-
-            // 2. Inisialisasi Standings
-            uniqueClubs.forEach(clubName => {
-                // Find a match to get the logo (simplification)
-                const clubLogo = APP_DATA.match.find(m => m.nama_klub_home === clubName)?.logo_klub_home ||
-                                 APP_DATA.match.find(m => m.nama_klub_away === clubName)?.logo_klub_away ||
-                                 'https://placehold.co/40x40/cccccc/333333?text=Logo';
-                                 
-                standings[clubName] = {
-                    name: clubName,
-                    logo: clubLogo,
-                    P: 0, // Main
-                    W: 0, // Menang
-                    D: 0, // Seri
-                    L: 0, // Kalah
-                    GF: 0, // Gol Memasukkan
-                    GA: 0, // Gol Kebobolan
-                    Pts: 0, // Poin
-                };
-            });
-
-            // 3. Proses Hasil Pertandingan (Hanya yang sudah selesai)
-            APP_DATA.match.filter(m => m.goal_home !== null && m.goal_away !== null).forEach(m => {
-                const home = standings[m.nama_klub_home];
-                const away = standings[m.nama_klub_away];
-
-                if (!home || !away) return; // Skip if club data is missing
-
-                // Pertandingan yang dimainkan (P)
-                home.P++;
-                away.P++;
-
-                // Gol Memasukkan (GF) & Gol Kebobolan (GA)
-                home.GF += m.goal_home;
-                home.GA += m.goal_away;
-                away.GF += m.goal_away;
-                away.GA += m.goal_home;
-
-                // Hasil & Poin
-                if (m.goal_home > m.goal_away) {
-                    // Home Win
-                    home.W++;
-                    home.Pts += 3;
-                    away.L++;
-                } else if (m.goal_home < m.goal_away) {
-                    // Away Win
-                    away.W++;
-                    away.Pts += 3;
-                    home.L++;
-                } else {
-                    // Draw
-                    home.D++;
-                    away.D++;
-                    home.Pts += 1;
-                    away.Pts += 1;
-                }
-            });
-
-            // 4. Hitung Selisih Gol (GD) dan Sortir
-            const finalStandings = Object.values(standings).map(club => ({
-                ...club,
-                GD: club.GF - club.GA
-            }));
-
-            // Sortir: Poin (desc) > Selisih Gol (desc) > Gol Memasukkan (desc) > Nama Klub (asc)
-            finalStandings.sort((a, b) => {
-                if (b.Pts !== a.Pts) return b.Pts - a.Pts;
-                if (b.GD !== a.GD) return b.GD - a.GD;
-                if (b.GF !== a.GF) return b.GF - a.GF;
-                return a.name.localeCompare(b.name);
-            });
-
-            return finalStandings;
-        }
-
-        function renderStandingsTable(standings) {
-            return `
-                <div class="overflow-x-auto shadow-xl rounded-xl">
-                    <table class="min-w-full bg-white text-xs">
-                        <thead class="bg-blue-600 text-white sticky top-0">
-                            <tr>
-                                <th class="p-2 w-8 text-left rounded-tl-xl">#</th>
-                                <th class="p-2 text-left">Klub</th>
-                                <th class="p-2">P</th>
-                                <th class="p-2">W</th>
-                                <th class="p-2">D</th>
-                                <th class="p-2">L</th>
-                                <th class="p-2">GF</th>
-                                <th class="p-2">GA</th>
-                                <th class="p-2 rounded-tr-xl font-extrabold text-sm">PTS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${standings.map((club, index) => `
-                                <tr class="${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'} border-b border-gray-100 hover:bg-blue-50 transition duration-150">
-                                    <td class="p-2 font-bold text-gray-700">${index + 1}</td>
-                                    <td class="p-2 text-left flex items-center">
-                                        <img src="${club.logo}" onerror="handleErrorImage(this)" alt="Logo ${club.name}" class="h-6 w-6 object-contain rounded-full mr-1">
-                                        <span class="font-semibold text-gray-800 truncate">${club.name}</span>
-                                    </td>
-                                    <td class="p-2 text-center text-gray-600">${club.P}</td>
-                                    <td class="p-2 text-center text-green-600 font-medium">${club.W}</td>
-                                    <td class="p-2 text-center text-gray-500 font-medium">${club.D}</td>
-                                    <td class="p-2 text-center text-red-600 font-medium">${club.L}</td>
-                                    <td class="p-2 text-center text-gray-700">${club.GF}</td>
-                                    <td class="p-2 text-center text-gray-700">${club.GA}</td>
-                                    <td class="p-2 text-center font-extrabold text-base text-blue-700">${club.Pts}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-        
-        function renderKlasemen() {
-            // Hentikan interval hitung mundur sebelumnya jika ada
-            if (countdownInterval) clearInterval(countdownInterval);
-
-            const standings = calculateStandings();
-            const competitionName = APP_DATA.kompetisi.nama_kompetisi || 'Nama Kompetisi';
-
-            // Filter match data untuk pencarian
-            const matchHtml = renderMatchList(APP_DATA.match);
-
-            return `
-                ${renderHeader('Klasemen')}
-                <div class="p-4 space-y-4">
-                    <!-- Kolom Pencarian -->
-                    <div class="relative mb-6">
-                        <input type="text" id="match-search" oninput="filterMatches(this.value)" placeholder="Cari pertandingan atau klub..." 
-                               class="w-full p-3 pl-10 border border-gray-300 rounded-xl focus:ring-blue-500 focus:border-blue-500 text-sm shadow-sm transition">
-                        <svg class="absolute left-3 top-3.5 h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                    </div>
-
-                    <!-- Ringkasan Kompetisi & Klasemen -->
-                    <div class="bg-white p-4 rounded-xl shadow-lg border-t-4 border-blue-600">
-                        <h2 class="text-xl font-extrabold text-blue-700 mb-2">${competitionName}</h2>
-                        <p class="text-xs text-gray-500 mb-4">${APP_DATA.kompetisi.deskripsi}</p>
-                        <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Tabel Klasemen</h3>
-                        ${renderStandingsTable(standings)}
-                    </div>
-                    
-                    <!-- Daftar Pertandingan -->
-                    <h2 class="text-lg font-bold text-gray-800 pt-4 border-b pb-2 border-blue-100">Jadwal & Hasil Pertandingan</h2>
-                    <div id="match-list" class="space-y-3">
-                        ${matchHtml}
-                    </div>
-                </div>
-            `;
-        }
-        
-        function filterMatches(searchTerm) {
-            const term = searchTerm.toLowerCase();
-            const filtered = APP_DATA.match.filter(match => 
-                match.nama_klub_home.toLowerCase().includes(term) || 
-                match.nama_klub_away.toLowerCase().includes(term) ||
-                match.babak_pertandingan.toLowerCase().includes(term)
-            );
-            document.getElementById('match-list').innerHTML = renderMatchList(filtered);
-            // Re-start countdown for filtered view
-            startCountdown();
-        }
-
-        function renderMatchList(matches) {
-            if (matches.length === 0) {
-                return `<p class="text-center text-gray-500 py-8">Tidak ada pertandingan yang ditemukan.</p>`;
+            if (filteredNews.length === 0) {
+                listEl.innerHTML = `<p class="text-center text-gray-500 py-4">Tidak ada berita yang ditemukan.</p>`;
+                return;
             }
-            return matches.map(match => {
-                const isPastMatch = match.goal_home !== null && match.goal_away !== null;
-                const matchDateTime = new Date(match.tanggal_match + ' ' + match.jam);
-                const isLive = !isPastMatch && matchDateTime < new Date() && matchDateTime > new Date(Date.now() - 2 * 60 * 60 * 1000); // Live if past but scores null (simple logic)
-                
-                let resultContent;
-                if (isPastMatch) {
-                    // Hasil Pertandingan (Past Match)
-                    const homeWin = match.goal_home > match.goal_away;
-                    const awayWin = match.goal_away > match.goal_home;
-                    const draw = match.goal_home === match.goal_away;
-                    
-                    resultContent = `
-                        <div class="flex flex-col items-center justify-center h-full">
-                            <span class="text-xl font-extrabold ${homeWin ? 'text-green-600' : draw ? 'text-gray-600' : 'text-red-600'}">${match.goal_home}</span>
-                            <span class="text-xs text-gray-500">FT</span>
-                        </div>
-                        <div class="flex flex-col items-center justify-center h-full">
-                            <span class="text-xl font-extrabold ${awayWin ? 'text-green-600' : draw ? 'text-gray-600' : 'text-red-600'}">${match.goal_away}</span>
-                            <span class="text-xs text-gray-500">FT</span>
-                        </div>
-                    `;
-                } else {
-                    // Hitung Mundur (Future Match)
-                    const matchTimeStr = `${match.tanggal_match} ${match.jam}`;
-                    
-                    resultContent = `
-                        <div class="col-span-2 flex flex-col items-center justify-center p-2 space-y-1">
-                            <span class="text-xs font-semibold text-gray-500">Kick Off: ${match.jam} WIB</span>
-                            <div id="countdown-${match.id_match}" data-match-time="${matchTimeStr}" class="text-sm font-extrabold text-red-600">
-                                ... LOADING ...
-                            </div>
-                        </div>
-                    `;
-                }
 
+            listEl.innerHTML = filteredNews.map(news => {
+                const words = news.isi_berita.split(' ');
+                const summary = words.slice(0, 20).join(' ') + (words.length > 20 ? '...' : '');
                 return `
-                    <div class="bg-white rounded-xl shadow-lg p-3 space-y-2 border-t-4 border-blue-400">
-                        <div class="flex justify-between items-center text-xs text-gray-500 font-medium border-b pb-2 mb-2">
-                            <span>${match.babak_pertandingan}</span>
-                            <span>${match.tanggal_match}</span>
-                        </div>
-                        <div class="grid grid-cols-5 gap-1 items-center text-center">
-                            <!-- Home Team -->
-                            <div class="col-span-2 flex flex-col items-center space-y-1">
-                                <img src="${match.logo_klub_home}" onerror="handleErrorImage(this)" alt="Logo ${match.nama_klub_home}" class="h-10 w-10 object-contain">
-                                <span class="text-xs font-bold text-gray-800 truncate w-full px-1">${match.nama_klub_home}</span>
-                            </div>
-                            
-                            <!-- Score/Countdown -->
-                            ${isPastMatch ? `
-                                <div class="col-span-1 grid grid-cols-2 gap-1 bg-gray-100 rounded-lg p-1">
-                                    ${resultContent}
-                                </div>
-                            ` : `
-                                <div class="col-span-3">
-                                    ${resultContent}
-                                </div>
-                            `}
-                            
-                            <!-- Away Team -->
-                            <div class="col-span-2 flex flex-col items-center space-y-1">
-                                <img src="${match.logo_klub_away}" onerror="handleErrorImage(this)" alt="Logo ${match.nama_klub_away}" class="h-10 w-10 object-contain">
-                                <span class="text-xs font-bold text-gray-800 truncate w-full px-1">${match.nama_klub_away}</span>
-                            </div>
+                    <div class="card-shadow bg-white rounded-xl overflow-hidden" onclick="openNewsModal('${news.id_berita}')">
+                        <img src="${getImageUrl(news.gambar_1)}" alt="${news.Judul_berita}" class="w-full h-40 object-cover bg-gray-200" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x160?text=Gagal+Memuat+Gambar'">
+                        <div class="p-4">
+                            <p class="text-xs text-gray-500 mb-1">${formatDate(news.tanggal)}</p>
+                            <h3 class="text-md font-bold text-gray-900 mb-2 truncate">${news.Judul_berita}</h3>
+                            <p class="text-sm text-gray-600">${summary}</p>
                         </div>
                     </div>
                 `;
             }).join('');
-        }
-        
-        function startCountdown() {
-            if (countdownInterval) clearInterval(countdownInterval);
-            
-            const updateCountdown = () => {
-                const countdownElements = document.querySelectorAll('[id^="countdown-"]');
-                const now = new Date().getTime();
+        };
 
-                countdownElements.forEach(el => {
-                    const matchTime = new Date(el.dataset.matchTime).getTime();
-                    const distance = matchTime - now;
+        // Modal functions for News
+        const openNewsModal = (id_berita) => {
+            const news = rawData.berita.find(n => n.id_berita === id_berita);
+            if (!news) return;
 
-                    if (distance < 0) {
-                        el.innerHTML = `<span class="text-gray-500">SUDAH BERLANGSUNG</span>`;
-                        return;
-                    }
+            const modalContentEl = document.getElementById('modal-content');
+            modalContentEl.innerHTML = `
+                <h2 class="text-2xl font-bold mb-2 text-pssi-dark">${news.Judul_berita}</h2>
+                <p class="text-sm text-gray-500 mb-4 border-b pb-2">Tanggal: ${formatDate(news.tanggal)}</p>
 
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    el.innerHTML = `${days}H ${hours}J ${minutes}M ${seconds}D`;
-                });
-            };
-
-            updateCountdown(); // Update immediately
-            countdownInterval = setInterval(updateCountdown, 1000); // Update every second
-        }
-
-        // --- KLUB VIEW LOGIC ---
-        function renderKlub() {
-            const klub = APP_DATA.klub_kami;
-            const pemain = APP_DATA.pemain;
-            const official = APP_DATA.official;
-
-            return `
-                ${renderHeader('Klub Kami')}
-                <div class="p-4 space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-lg text-center border-t-4 border-blue-600">
-                        <img src="${klub.logo_klub}" onerror="handleErrorImage(this)" alt="Logo ${klub.nama_klub}" class="h-24 w-24 object-contain rounded-full mx-auto mb-3 border-2 border-gray-200 p-1">
-                        <h2 class="text-2xl font-extrabold text-blue-700">${klub.nama_klub}</h2>
-                        <p class="text-sm text-gray-500 mb-4">${klub.alamat_klub}</p>
-                        
-                        <div class="bg-gray-100 p-4 rounded-lg text-left text-sm space-y-1">
-                            <p><span class="font-semibold text-gray-700">Manajer:</span> ${klub.nama_manajer}</p>
-                            <p><span class="font-semibold text-gray-700">Telp:</span> ${klub.no_telp_klub}</p>
-                        </div>
-                    </div>
-
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Daftar Pemain</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        ${pemain.map(p => `
-                            <div class="bg-white rounded-xl shadow-md p-3 text-center transition hover:shadow-lg">
-                                <img src="${p.pas_photo_pemain}" onerror="handleErrorImage(this)" alt="Foto ${p.nama_pemain}" class="h-16 w-16 object-cover rounded-full mx-auto mb-2 border border-blue-300">
-                                <span class="text-sm font-bold text-gray-800 block truncate">${p.nama_pemain}</span>
-                                <span class="text-xs text-gray-500 block">#${p.no_punggung} - ${p.posisi}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-3 pt-4">Staf Official</h3>
-                    <div class="grid grid-cols-2 gap-3">
-                        ${official.map(o => `
-                            <div class="bg-white rounded-xl shadow-md p-3 text-center transition hover:shadow-lg">
-                                <img src="${o.pas_photo_official}" onerror="handleErrorImage(this)" alt="Foto ${o.nama_official}" class="h-16 w-16 object-cover rounded-full mx-auto mb-2 border border-blue-300">
-                                <span class="text-sm font-bold text-gray-800 block truncate">${o.nama_official}</span>
-                                <span class="text-xs text-blue-600 font-semibold block">${o.jabatan}</span>
-                            </div>
-                        `).join('')}
-                    </div>
+                <div class="space-y-4 mb-6">
+                    <img src="${getImageUrl(news.gambar_1)}" alt="Gambar 1" class="w-full h-auto rounded-lg shadow-md bg-gray-200" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x200?text=Gambar+1'">
+                    <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">${news.isi_berita}</p>
+                    ${news.gambar_2 && news.gambar_2.startsWith('http') ? `<img src="${getImageUrl(news.gambar_2)}" alt="Gambar 2" class="w-full h-auto rounded-lg shadow-md bg-gray-200" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x200?text=Gambar+2'">` : ''}
+                    ${news.gambar_3 && news.gambar_3.startsWith('http') ? `<img src="${getImageUrl(news.gambar_3)}" alt="Gambar 3" class="w-full h-auto rounded-lg shadow-md bg-gray-200" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/400x200?text=Gambar+3'">` : ''}
                 </div>
             `;
-        }
+            document.getElementById('news-modal').classList.remove('hidden');
+            document.getElementById('news-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
 
-        // --- INFO VIEW LOGIC ---
-        function renderInfo() {
-            // Menggunakan data berita yang sudah diurutkan (atau data lain jika ada)
-            const sortedBerita = [...APP_DATA.berita].sort((a, b) => parseDate(b.tanggal) - parseDate(a.tanggal));
+        const closeNewsModal = () => {
+            document.getElementById('news-modal').classList.add('hidden');
+            document.getElementById('news-modal').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        };
 
-            return `
-                ${renderHeader('Informasi')}
-                <div class="p-4 space-y-4">
-                    <h2 class="text-xl font-extrabold text-gray-800 border-b pb-2">Semua Berita & Info</h2>
-                    <div class="space-y-3">
-                        ${renderNewsList(sortedBerita)}
-                    </div>
-                    <div class="text-center p-4">
-                        <a href="${APP_DATA.login_admin}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Login Admin (Eksternal Link)</a>
-                    </div>
+
+        // --- KLASEMEN PAGE (Point 3) ---
+
+        let matchFilter = '';
+
+        const renderKlasemen = (filter = '') => {
+            matchFilter = filter.toLowerCase();
+
+            contentEl.innerHTML = `
+                <div class="mb-5">
+                    <input type="text" id="match-search" placeholder="Cari pertandingan..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pssi-blue focus:border-pssi-blue transition duration-150 shadow-sm" oninput="filterMatches(this.value)">
+                </div>
+                
+                <h2 class="text-lg font-semibold mb-3 text-gray-700">Kompetisi Aktif</h2>
+                <div id="competition-list" class="grid grid-cols-2 gap-3 mb-6">
+                    ${rawData.list_kompetisi.map(comp => `
+                        <div class="card-shadow bg-white rounded-xl p-3 text-center border border-gray-100" onclick="handleKlasemenDetail('${comp.id_kompetisi}')">
+                            <img src="${getImageUrl(comp.url_logo_liga)}" alt="${comp.nama_kompetisi}" class="h-12 w-12 object-contain mx-auto mb-2" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Logo+Liga'">
+                            <p class="text-sm font-semibold text-gray-800">${comp.nama_kompetisi}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <h2 class="text-lg font-semibold mb-3 text-gray-700 border-t pt-4">Semua Hasil Pertandingan</h2>
+                <div id="all-match-list">
+                    ${renderMatchList(matchFilter)}
                 </div>
             `;
-        }
+        };
 
-        // --- TENTANG VIEW LOGIC ---
-        function renderTentang() {
-            const t = APP_DATA.tentang;
+        const updateMatchCountdown = () => {
+            // Function to run every second to update all countdown displays
+            document.querySelectorAll('[data-match-datetime]').forEach(el => {
+                const matchDateTime = new Date(el.getAttribute('data-match-datetime'));
+                const diff = matchDateTime.getTime() - Date.now();
+
+                if (diff < 0) {
+                    el.innerHTML = '<span class="text-green-500">SELESAI</span>';
+                    el.classList.remove('text-red-500');
+                    el.classList.add('text-green-500');
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                    el.innerHTML = `Kick Off: ${days}H ${hours}J ${minutes}M ${seconds}D`;
+                }
+            });
+        };
+
+        const renderMatchDetail = (match) => {
+            const matchDateTime = parseDate(`${match.tanggal_match} ${match.jam}`, true);
+            const isUpcoming = matchDateTime && matchDateTime.getTime() > Date.now();
+            const dateTimeAttr = matchDateTime ? matchDateTime.toISOString() : '';
+
+            const goalHomeList = match.keterangan_goal_home ? match.keterangan_goal_home.split(',').map(g => `<span class="text-xs font-medium text-pssi-dark px-1 rounded-full">${g.trim()}</span>`).join(' ') : ' - ';
+            const goalAwayList = match.keterangan_goal_away ? match.keterangan_goal_away.split(',').map(g => `<span class="text-xs font-medium text-pssi-dark px-1 rounded-full">${g.trim()}</span>`).join(' ') : ' - ';
+
+
             return `
-                ${renderHeader('Tentang Kami')}
-                <div class="p-4 space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
-                        <h2 class="text-xl font-extrabold text-blue-700 mb-3">${t.nama_organisasi}</h2>
-                        <p class="text-sm text-gray-500 mb-4">Berdiri sejak: ${t.tanggal_berdiri}</p>
-                        
-                        <div class="space-y-4 text-sm">
-                            <div class="p-3 bg-blue-50 rounded-lg">
-                                <h3 class="font-bold text-blue-800 mb-1">Visi</h3>
-                                <p class="text-gray-700">${t.visi}</p>
-                            </div>
-                            <div class="p-3 bg-blue-50 rounded-lg">
-                                <h3 class="font-bold text-blue-800 mb-1">Misi</h3>
-                                <p class="text-gray-700">${t.misi}</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-white rounded-xl p-4 mb-4 card-shadow border border-gray-100">
+                    <p class="text-xs text-center text-pssi-blue font-semibold mb-3">${match.nama_kompetisi} - ${match.babak_pertandingan}</p>
                     
-                    <h3 class="text-lg font-bold text-gray-800 border-b pb-2 mb-3">Struktur Organisasi</h3>
-                    <div class="bg-white p-4 rounded-xl shadow-lg">
-                        <ul class="space-y-2 text-sm">
-                            <li class="flex justify-between border-b pb-1"><span class="font-semibold">Ketua:</span> <span class="text-gray-600">${t.ketua}</span></li>
-                            <li class="flex justify-between border-b pb-1"><span class="font-semibold">Wakil Ketua:</span> <span class="text-gray-600">${t.wakil_ketua}</span></li>
-                            <li class="flex justify-between border-b pb-1"><span class="font-semibold">Sekretaris:</span> <span class="text-gray-600">${t.sekretaris}</span></li>
-                            <li class="flex justify-between border-b pb-1"><span class="font-semibold">Bendahara:</span> <span class="text-gray-600">${t.bendahara}</span></li>
-                            <li class="flex justify-between border-b pb-1"><span class="font-semibold">Humas:</span> <span class="text-gray-600">${t.humas}</span></li>
-                            <li class="flex justify-between"><span class="font-semibold">Media:</span> <span class="text-gray-600">${t.media}</span></li>
-                        </ul>
+                    <div class="flex justify-between items-center text-center">
+                        <!-- Home Club -->
+                        <div class="w-5/12 flex flex-col items-center">
+                            <img src="${getImageUrl(match.logo_klub_home)}" alt="${match.nama_klub_home}" class="h-14 w-14 object-contain rounded-full border-2 border-gray-200 p-1 mb-2 bg-white" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Logo'">
+                            <span class="text-sm font-bold text-gray-800 text-center">${match.nama_klub_home}</span>
+                        </div>
+
+                        <!-- Score / Status -->
+                        <div class="w-2/12">
+                            ${isUpcoming ? 
+                                `<span class="text-sm font-bold text-gray-500">VS</span>` :
+                                `<span class="text-3xl font-extrabold text-pssi-dark">${match.goal_home} - ${match.goal_away}</span>`
+                            }
+                        </div>
+                        
+                        <!-- Away Club -->
+                        <div class="w-5/12 flex flex-col items-center">
+                            <img src="${getImageUrl(match.logo_klub_away)}" alt="${match.nama_klub_away}" class="h-14 w-14 object-contain rounded-full border-2 border-gray-200 p-1 mb-2 bg-white" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Logo'">
+                            <span class="text-sm font-bold text-gray-800 text-center">${match.nama_klub_away}</span>
+                        </div>
                     </div>
+
+                    <!-- Match Info & Countdown -->
+                    <div class="text-center mt-3 border-t pt-3 border-gray-100">
+                        <p class="text-xs text-gray-500 mb-1"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>${match.lokasi}</p>
+                        <p class="text-sm font-medium text-gray-700">${formatDate(match.tanggal_match)} - ${match.jam}</p>
+                        ${isUpcoming ? 
+                            `<p class="text-xs font-bold text-red-500 mt-2" data-match-datetime="${dateTimeAttr}">Menghitung Mundur...</p>` :
+                            `<p class="text-xs font-medium text-green-500 mt-2">PERTANDINGAN SELESAI</p>`
+                        }
+                    </div>
+
+                    ${!isUpcoming ? `
+                    <div class="mt-4 pt-4 border-t border-gray-100 grid grid-cols-2 gap-4 text-xs">
+                        <div>
+                            <p class="font-bold text-pssi-blue mb-1">Pencetak Gol (${match.goal_home}):</p>
+                            <div class="flex flex-wrap gap-1">${goalHomeList}</div>
+                            <p class="font-bold text-pssi-blue mt-2 mb-1">Kartu Kuning/Merah:</p>
+                            <p class="text-gray-700">KK: ${match.kartu_kuning_home} (${match.keterangan_kartu_kuning_home || '-'})</p>
+                            <p class="text-gray-700">KM: ${match.kartu_merah_home} (${match.keterangan_kartu_merah_home || '-'})</p>
+                            <p class="font-bold text-pssi-blue mt-2">Poin: ${match.poin_home}</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-pssi-blue mb-1">Pencetak Gol (${match.goal_away}):</p>
+                            <div class="flex flex-wrap gap-1">${goalAwayList}</div>
+                            <p class="font-bold text-pssi-blue mt-2 mb-1">Kartu Kuning/Merah:</p>
+                            <p class="text-gray-700">KK: ${match.kartu_kuning_away} (${match.keterangan_kartu_kuning_away || '-'})</p>
+                            <p class="text-gray-700">KM: ${match.kartu_merah_away} (${match.keterangan_kartu_merah_away || '-'})</p>
+                            <p class="font-bold text-pssi-blue mt-2">Poin: ${match.poin_away}</p>
+                        </div>
+                    </div>
+                    ` : ''}
                 </div>
             `;
-        }
-
-
-        // --- MAIN APPLICATION LOGIC ---
+        };
         
-        function showView(viewName, element) {
-            currentView = viewName;
-            const appContent = document.getElementById('app-content');
-            
-            // Hentikan semua interval sebelum berpindah view
-            stopSlider();
-            if (countdownInterval) clearInterval(countdownInterval);
-
-            let contentHtml = '';
-            
-            switch (viewName) {
-                case 'home':
-                    contentHtml = renderHome();
-                    break;
-                case 'klasemen':
-                    contentHtml = renderKlasemen();
-                    break;
-                case 'klub':
-                    contentHtml = renderKlub();
-                    break;
-                case 'info':
-                    contentHtml = renderInfo();
-                    break;
-                case 'tentang':
-                    contentHtml = renderTentang();
-                    break;
-                default:
-                    contentHtml = `
-                        ${renderHeader('Error')}
-                        <div class="p-4 text-center text-gray-500 mt-20">Halaman tidak ditemukan.</div>
-                    `;
+        const filterMatches = (filter) => {
+            matchFilter = filter.toLowerCase();
+            const listEl = document.getElementById('all-match-list');
+            if(listEl) {
+                listEl.innerHTML = renderMatchList(matchFilter);
             }
+        };
 
-            // Render content
-            appContent.innerHTML = contentHtml;
+        const renderMatchList = (filter) => {
+            clearCountdownIntervals();
 
-            // Update bottom navigation styling
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('nav-active', 'text-white', 'bg-blue-700', 'rounded-lg', 'shadow-inner');
-                btn.classList.add('text-gray-500');
+            const filteredMatches = rawData.match.filter(m =>
+                m.nama_kompetisi.toLowerCase().includes(filter) ||
+                m.nama_klub_home.toLowerCase().includes(filter) ||
+                m.nama_klub_away.toLowerCase().includes(filter) ||
+                m.lokasi.toLowerCase().includes(filter)
+            ).sort((a, b) => {
+                const dateA = parseDate(`${a.tanggal_match} ${a.jam}`, true);
+                const dateB = parseDate(`${b.tanggal_match} ${b.jam}`, true);
+                
+                const isAUpcoming = dateA && dateA.getTime() > Date.now();
+                const isBUpcoming = dateB && dateB.getTime() > Date.now();
+
+                // Upcoming matches always come first
+                if (isAUpcoming && !isBUpcoming) return -1;
+                if (!isAUpcoming && isBUpcoming) return 1;
+
+                // Sort chronologically (oldest first if past, newest first if upcoming)
+                return dateA - dateB; 
             });
 
-            if (element) {
-                element.classList.add('nav-active', 'text-white', 'bg-blue-700', 'rounded-lg', 'shadow-inner');
-                element.classList.remove('text-gray-500');
+            if (filteredMatches.length === 0) {
+                return `<p class="text-center text-gray-500 py-4">Tidak ada pertandingan yang ditemukan.</p>`;
             }
 
-            // Jalankan logika khusus setelah rendering
-            if (viewName === 'home') {
-                startSlider();
-            } else if (viewName === 'klasemen') {
-                startCountdown();
-            }
-        }
+            // Start the countdown timer when matches are rendered
+            countdownIntervals.push(setInterval(updateMatchCountdown, 1000));
+            
+            return filteredMatches.map(renderMatchDetail).join('');
+        };
 
-        // Initialize the app on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            // Ensure the initial view is 'home' and the button is active
-            const homeButton = document.getElementById('nav-home');
-            showView('home', homeButton);
+        const handleKlasemenDetail = (id_kompetisi) => {
+            history.pushState({ page: 'klasemen', detailId: id_kompetisi }, null, `#klasemen:${id_kompetisi}`);
+            navigate(`klasemen:${id_kompetisi}`, true);
+        };
+
+        const renderKlasemenDetail = (id_kompetisi) => {
+            clearCountdownIntervals();
+            
+            const competition = rawData.list_kompetisi.find(c => c.id_kompetisi === id_kompetisi);
+            if (!competition) {
+                contentEl.innerHTML = '<p class="text-center text-red-500 py-8">Kompetisi tidak ditemukan.</p>';
+                return;
+            }
+
+            const compMatches = rawData.match.filter(m => m.id_kompetisi === id_kompetisi);
+            const rounds = [...new Set(compMatches.map(m => m.babak_pertandingan))];
+
+            contentEl.innerHTML = `
+                <button class="text-pssi-blue flex items-center mb-4 text-sm font-medium hover:underline active:scale-[0.99] transform" onclick="handleKlasemenBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    Kembali ke Daftar Kompetisi
+                </button>
+                <h2 class="text-xl font-bold mb-4 text-pssi-dark border-b pb-2">${competition.nama_kompetisi}</h2>
+                <p class="text-gray-600 mb-6 text-sm">${competition.deskripsi}</p>
+                
+                <h3 class="text-lg font-semibold mb-3 text-gray-700">Pertandingan Berdasarkan Babak</h3>
+                <div id="klasemen-detail-list">
+                ${rounds.map(round => {
+                    const roundMatches = compMatches.filter(m => m.babak_pertandingan === round);
+                    
+                    const sortedRoundMatches = [...roundMatches].sort((a, b) => {
+                        const dateA = parseDate(`${a.tanggal_match} ${a.jam}`, true);
+                        const dateB = parseDate(`${b.tanggal_match} ${b.jam}`, true);
+                        
+                        const isAUpcoming = dateA && dateA.getTime() > Date.now();
+                        const isBUpcoming = dateB && dateB.getTime() > Date.now();
+
+                        if (isAUpcoming && !isBUpcoming) return -1;
+                        if (!isAUpcoming && isBUpcoming) return 1;
+
+                        return dateA - dateB;
+                    });
+
+
+                    return `
+                        <div class="mb-6 bg-gray-50 p-4 rounded-xl shadow-inner border border-gray-100">
+                            <h4 class="text-md font-bold text-pssi-blue mb-3 border-b pb-2">${round}</h4>
+                            <div class="space-y-4">
+                                ${sortedRoundMatches.map(renderMatchDetail).join('')}
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+                </div>
+            `;
+            // Start the countdown timer when matches are rendered
+            countdownIntervals.push(setInterval(updateMatchCountdown, 1000));
+        };
+
+        const handleKlasemenBack = () => {
+            history.back(); // Navigasi kembali ke daftar kompetisi
+        };
+
+
+        // --- KLUB PAGE (Point 4) ---
+
+        let klubFilter = '';
+
+        const renderKlubList = (filter = '') => {
+            klubFilter = filter.toLowerCase();
+
+            contentEl.innerHTML = `
+                <div class="mb-5">
+                    <input type="text" id="klub-search" placeholder="Cari klub, pemain, atau official..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pssi-blue focus:border-pssi-blue transition duration-150 shadow-sm" oninput="filterKlub(this.value)">
+                </div>
+                
+                <h2 class="text-lg font-semibold mb-3 text-gray-700">Daftar Klub Terdaftar</h2>
+                <div id="club-list" class="grid grid-cols-2 gap-4">
+                    ${renderFilteredClubs(klubFilter)}
+                </div>
+            `;
+            if (currentClubDetail) {
+                 // Open modal if deep-linked, even after rendering list
+                 openClubModal(currentClubDetail);
+            }
+        };
+
+        const renderFilteredClubs = (filter) => {
+            // Logic pencarian terpusat
+            const allSearchableIds = new Set();
+            
+            rawData.klub_kami.forEach(k => {
+                if (k.nama_klub.toLowerCase().includes(filter) || k.nama_manajer.toLowerCase().includes(filter)) {
+                    allSearchableIds.add(k.id_klub);
+                }
+            });
+
+            rawData.pemain.forEach(p => {
+                if (p.nama_pemain.toLowerCase().includes(filter) || p.nama_punggung.toLowerCase().includes(filter) || p.posisi.toLowerCase().includes(filter)) {
+                    allSearchableIds.add(p.id_klub);
+                }
+            });
+
+            rawData.official.forEach(o => {
+                if (o.nama_official.toLowerCase().includes(filter) || o.jabatan.toLowerCase().includes(filter)) {
+                    allSearchableIds.add(o.id_klub);
+                }
+            });
+
+            const filteredClubs = rawData.klub_kami.filter(k => allSearchableIds.size === 0 || allSearchableIds.has(k.id_klub));
+            
+            if (filteredClubs.length === 0) {
+                return `<p class="text-center text-gray-500 py-4 col-span-2">Tidak ada klub yang ditemukan.</p>`;
+            }
+
+            return filteredClubs.map(klub => `
+                <div class="card-shadow bg-white rounded-xl p-4 text-center border border-gray-100" onclick="handleKlubDetail('${klub.id_klub}')">
+                    <img src="${getImageUrl(klub.logo_klub)}" alt="${klub.nama_klub}" class="h-16 w-16 object-contain mx-auto mb-2 rounded-full border-2 border-pssi-blue p-1 bg-white" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Logo'">
+                    <p class="text-md font-bold text-gray-800">${klub.nama_klub}</p>
+                    <p class="text-xs text-gray-500">${klub.id_klub}</p>
+                </div>
+            `).join('');
+        };
+
+        const filterKlub = (filter) => {
+            const listEl = document.getElementById('club-list');
+            if(listEl) {
+                listEl.innerHTML = renderFilteredClubs(filter.toLowerCase());
+            }
+        };
+
+        const handleKlubDetail = (id_klub) => {
+            // Push state only for the detail view itself, not the modal open action
+            history.pushState({ page: 'klub', detailId: id_klub }, null, `#klub:${id_klub}`);
+            currentClubDetail = id_klub; 
+            openClubModal(id_klub);
+        };
+
+        // Modal functions for Club Detail
+        const openClubModal = (id_klub) => {
+            renderClubModalContent(id_klub);
+            document.getElementById('club-modal').classList.remove('hidden');
+            document.getElementById('club-modal').classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeClubModal = () => {
+            document.getElementById('club-modal').classList.add('hidden');
+            document.getElementById('club-modal').classList.remove('flex');
+            document.body.style.overflow = 'auto';
+            currentClubDetail = null;
+            currentKlubTab = 'pemain';
+            
+            // Go back to the base klub list in history
+            history.replaceState({ page: 'klub', detailId: null }, null, '#klub');
+        };
+
+        const changeKlubTab = (tab) => {
+            currentKlubTab = tab;
+            // Rerender only the tab content for responsiveness
+            const tabContentEl = document.getElementById('klub-tab-content');
+            if (tabContentEl) {
+                tabContentEl.innerHTML = `<div class="grid grid-cols-2 gap-4">${currentKlubTab === 'pemain' ? renderPlayers() : renderOfficials()}</div>`;
+            }
+            
+            // Update button styles
+            document.querySelectorAll('.klub-tab-btn').forEach(btn => {
+                const isActive = btn.getAttribute('data-tab') === tab;
+                btn.classList.toggle('text-pssi-blue', isActive);
+                btn.classList.toggle('border-b-2', isActive);
+                btn.classList.toggle('border-pssi-blue', isActive);
+                btn.classList.toggle('text-gray-500', !isActive);
+                btn.classList.toggle('hover:text-gray-700', !isActive);
+            });
+        };
+
+        const renderPlayers = () => {
+            const players = rawData.pemain.filter(p => p.id_klub === currentClubDetail);
+            return players.length > 0 ? players.map(p => `
+                <div class="bg-gray-50 rounded-xl p-3 text-center card-shadow">
+                    <img src="${getImageUrl(p.pas_photo_pemain)}" alt="${p.nama_pemain}" class="h-16 w-16 object-cover mx-auto mb-2 rounded-full border-2 border-pssi-blue p-0.5 bg-white" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Foto'">
+                    <p class="text-md font-semibold text-gray-800">${p.nama_pemain}</p>
+                    <p class="text-xs text-gray-500">#${p.no_punggung} | ${p.posisi}</p>
+                    <p class="text-xs text-gray-600 mt-1">Umur: ${calculateAge(p.tanggal_lahir)}</p>
+                </div>
+            `).join('') : '<p class="text-center text-gray-500 py-4 col-span-2">Tidak ada data pemain.</p>';
+        };
+
+        const renderOfficials = () => {
+            const officials = rawData.official.filter(o => o.id_klub === currentClubDetail);
+            return officials.length > 0 ? officials.map(o => `
+                <div class="bg-gray-50 rounded-lg p-3 text-center card-shadow">
+                    <img src="${getImageUrl(o.pas_photo_official)}" alt="${o.nama_official}" class="h-16 w-16 object-cover mx-auto mb-2 rounded-full border-2 border-pssi-blue p-0.5 bg-white" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Foto'">
+                    <p class="text-md font-semibold text-gray-800">${o.nama_official}</p>
+                    <p class="text-xs text-pssi-blue mt-1">${o.jabatan}</p>
+                    <p class="text-xs text-gray-600">Umur: ${calculateAge(o.tanggal_lahir)}</p>
+                </div>
+            `).join('') : '<p class="text-center text-gray-500 py-4 col-span-2">Tidak ada data official.</p>';
+        };
+
+
+        const renderClubModalContent = (id_klub) => {
+            const klub = rawData.klub_kami.find(k => k.id_klub === id_klub);
+            if (!klub) return;
+
+            const modalContentEl = document.getElementById('club-modal-content');
+            const klubMatches = rawData.match.filter(m => m.id_klub_home === id_klub || m.id_klub_away === id_klub);
+
+            const matchRecapHTML = klubMatches.length > 0 ? klubMatches.map(match => {
+                const isHome = match.id_klub_home === id_klub;
+                const opponentName = isHome ? match.nama_klub_away : match.nama_klub_home;
+                const score = isHome ? `${match.goal_home} - ${match.goal_away}` : `${match.goal_away} - ${match.goal_home}`;
+                const resultClass = isHome ? 
+                    (match.poin_home > match.poin_away ? 'text-green-600 font-bold' : (match.poin_home === match.poin_away ? 'text-gray-600' : 'text-red-600')) :
+                    (match.poin_away > match.poin_home ? 'text-green-600 font-bold' : (match.poin_away === match.poin_home ? 'text-gray-600' : 'text-red-600'));
+                
+                return `
+                    <div class="flex justify-between items-center text-xs border-b py-2 last:border-b-0">
+                        <span class="text-gray-500 w-1/4">${formatDate(match.tanggal_match)}</span>
+                        <span class="text-gray-800 w-1/4 truncate">${opponentName}</span>
+                        <span class="font-semibold w-1/4 text-center ${resultClass}">${score}</span>
+                        <span class="text-xs text-gray-500 w-1/4 text-right truncate">${match.nama_kompetisi}</span>
+                    </div>
+                `;
+            }).join('') : '<p class="text-center text-gray-500 py-4">Belum ada rekap pertandingan.</p>';
+
+
+            modalContentEl.innerHTML = `
+                <div class="text-center mb-6 border-b pb-4">
+                    <img src="${getImageUrl(klub.logo_klub)}" alt="${klub.nama_klub}" class="h-24 w-24 object-contain mx-auto mb-3 rounded-full border-4 border-pssi-blue p-1 bg-white shadow-lg" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Logo'">
+                    <h2 class="text-2xl font-bold text-gray-900">${klub.nama_klub}</h2>
+                    <p class="text-sm text-gray-500">${klub.id_klub}</p>
+                </div>
+                
+                <div class="space-y-3 mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-1">Informasi Klub</h3>
+                    <p class="text-gray-700 text-sm"><span class="font-medium text-pssi-dark">Manajer:</span> ${klub.nama_manajer}</p>
+                    <p class="text-gray-700 text-sm"><span class="font-medium text-pssi-dark">No. Telp:</span> <a href="tel:${klub.no_telp_klub}" class="text-pssi-blue hover:underline">${klub.no_telp_klub}</a></p>
+                    <p class="text-gray-700 text-sm"><span class="font-medium text-pssi-dark">Alamat:</span> ${klub.alamat_klub}</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold text-gray-800 border-b pb-1 mb-3">Rekap Pertandingan</h3>
+                    <div class="bg-gray-100 rounded-lg p-3">
+                        ${matchRecapHTML}
+                    </div>
+                </div>
+
+                <!-- Tabs for Pemain and Official -->
+                <div class="flex mb-4 border-b border-gray-200">
+                    <button class="flex-1 py-2 text-center text-sm font-bold klub-tab-btn ${currentKlubTab === 'pemain' ? 'text-pssi-blue border-b-2 border-pssi-blue' : 'text-gray-500 hover:text-gray-700'}" data-tab="pemain" onclick="changeKlubTab('pemain')">Pemain</button>
+                    <button class="flex-1 py-2 text-center text-sm font-bold klub-tab-btn ${currentKlubTab === 'official' ? 'text-pssi-blue border-b-2 border-pssi-blue' : 'text-gray-500 hover:text-gray-700'}" data-tab="official" onclick="changeKlubTab('official')">Official</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="klub-tab-content">
+                    <div class="grid grid-cols-2 gap-4">
+                        ${currentKlubTab === 'pemain' ? renderPlayers() : renderOfficials()}
+                    </div>
+                </div>
+            `;
+        };
+
+
+        // --- TENTANG PAGE (Point 5) ---
+
+        const renderTentang = () => {
+            const { nama_organisasi, tanggal_berdiri, visi, misi, ketua, wakil_ketua, sekretaris, bendahara, humas, media } = rawData.tentang;
+            const loginUrl = rawData.login_admin;
+
+            contentEl.innerHTML = `
+                <h2 class="text-2xl font-bold text-pssi-dark mb-4 border-b pb-2">${nama_organisasi}</h2>
+                <p class="text-sm text-gray-500 mb-6">Berdiri sejak: ${formatDate(tanggal_berdiri)}</p>
+
+                <div class="space-y-6 mb-8">
+                    <div class="bg-gray-100 p-4 rounded-xl shadow-inner border border-gray-200">
+                        <h3 class="text-lg font-bold text-pssi-blue mb-2">Visi</h3>
+                        <p class="text-gray-700 whitespace-pre-wrap text-sm">${visi}</p>
+                    </div>
+                    <div class="bg-gray-100 p-4 rounded-xl shadow-inner border border-gray-200">
+                        <h3 class="text-lg font-bold text-pssi-blue mb-2">Misi</h3>
+                        <p class="text-gray-700 whitespace-pre-wrap text-sm">${misi}</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Struktur Organisasi</h3>
+                <div class="space-y-2 mb-8 bg-white p-4 rounded-xl shadow-md">
+                    ${renderStructureItem('Ketua', ketua)}
+                    ${renderStructureItem('Wakil Ketua', wakil_ketua)}
+                    ${renderStructureItem('Sekretaris', sekretaris)}
+                    ${renderStructureItem('Bendahara', bendahara)}
+                    ${renderStructureItem('Humas', humas)}
+                    ${renderStructureItem('Media', media)}
+                </div>
+
+                <a href="${loginUrl}" target="_blank" class="w-full block text-center bg-pssi-blue hover:bg-pssi-dark text-white font-bold py-3 px-4 rounded-lg transition duration-150 active:scale-[0.99] transform shadow-lg">
+                    Login Admin
+                </a>
+            `;
+        };
+
+        const renderStructureItem = (label, value) => {
+            if (!value) return '';
+            return `
+                <div class="flex justify-between items-center border-b pb-1 last:border-b-0 last:pb-0">
+                    <span class="text-sm font-medium text-gray-500">${label}</span>
+                    <span class="text-sm font-semibold text-gray-800">${value}</span>
+                </div>
+            `;
+        };
+
+        // --- History & Initial Load ---
+
+        const initialLoad = () => {
+            let hash = window.location.hash || '#home';
+            
+            // Extract page and potential detailId from hash
+            const [page, detailId] = hash.replace('#', '').split(':');
+            
+            if (page === 'klub' && detailId) {
+                // If deep-linked to a club, set it as current, but navigate to the list page first
+                currentClubDetail = detailId;
+                // We don't push the detail state here, navigate will do it or we open the modal
+                navigate('klub');
+            } else {
+                // Standard navigation
+                navigate(hash);
+            }
+            
+            // Replace the initial state in history for proper 'back' button handling
+            window.history.replaceState({ page: activePage, detailId: currentDetailView }, null, window.location.hash);
+        };
+
+        // Handle back button press (Point 6)
+        window.onpopstate = (event) => {
+            // Priority 1: Close modals
+            if (!document.getElementById('news-modal').classList.contains('hidden')) {
+                closeNewsModal();
+                history.pushState(event.state, null, window.location.hash); // Keep the current state
+                return;
+            }
+            
+            if (!document.getElementById('club-modal').classList.contains('hidden')) {
+                closeClubModal(); // closeClubModal already handles history.replaceState
+                return;
+            }
+            
+            // Priority 2: Regular page navigation based on history state
+            const hash = window.location.hash || '#home';
+            const [page, detailId] = hash.replace('#', '').split(':');
+
+            // Special handling to properly show the list view when backing from a detail link
+            if (page === 'klasemen' && !detailId) {
+                currentDetailView = null;
+                navigate('klasemen', true);
+            } else if (page === 'klub' && !detailId) {
+                currentClubDetail = null;
+                navigate('klub', true);
+            } else {
+                navigate(hash, true); // Force render based on history state
+            }
+        };
+
+        // Event listeners for bottom navigation links
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = item.getAttribute('data-page');
+                // Reset detail view when clicking main nav
+                currentDetailView = null;
+                currentClubDetail = null; 
+
+                // Push new state
+                history.pushState({ page: page, detailId: null }, null, `#${page}`);
+                navigate(page, true);
+            });
         });
 
+        // Start the application
+        window.addEventListener('load', initialLoad);
     </script>
 </body>
 </html>
