@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASKAB PSSI MENTAWAI</title>
+    <title>SIPAKEM - Sistem Informasi PSSI Kepulauan Mentawai </title>
     <!-- Memuat Tailwind CSS untuk styling yang cepat dan elegan -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Memuat Font Awesome untuk ikon -->
@@ -86,7 +86,7 @@
         </a>
         <a href="#" data-page="klasemen" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 transition-all">
             <i class="fas fa-list-ol text-xl"></i>
-            <span class="text-xs mt-1 font-medium">Klasemen</span>
+            <span class="text-xs mt-1 font-medium">Match</span>
         </a>
         <a href="#" data-page="klub" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 transition-all">
             <i class="fas fa-shield-alt text-xl"></i>
@@ -118,8 +118,8 @@
 
         const HEADER_DATA = {
             logo_pssi: "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
-            Judul_kepala: "ASKAB PSSI PENTAWAI",
-            logo_askab: "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg"
+            Judul_kepala: "SIPAKEM - Sistem Informasi PSSI Kepulauan Mentawai",
+            logo_askab: "https://i.ibb.co.com/gZtpn9GH/Logo-PSSI.png"
         };
 
         const NEWS_DATA = [
@@ -1861,7 +1861,7 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                countdownEl.innerHTML = `${days}H ${hours}J ${minutes}M ${seconds}D`;
+                countdownEl.innerHTML = `${days} H   ${hours} J   ${minutes} M   ${seconds} D`;
             });
         }
 
