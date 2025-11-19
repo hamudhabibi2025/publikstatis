@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SIPAKEM - Sistem Informasi PSSI Kepulauan Mentawai </title>
-    <!-- Memuat Tailwind CSS untuk styling yang cepat dan elegan -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Memuat Font Awesome untuk ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* buliah mancaliak, tapi jan lo di gaduah bana ya booossssss */
@@ -54,19 +52,25 @@
             50% { opacity: 1; }
             100% { opacity: 0.6; }
         }
+        /* Agar tab tetap di atas saat scroll */
+        .sticky-tabs {
+            position: sticky;
+            top: 56px; /* Di bawah header */
+            background-color: #f4f7f6;
+            z-index: 30;
+            padding-top: 4px;
+            padding-bottom: 4px;
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Header (Kepala Halaman) - Fixed Top -->
     <header id="app-header" class="fixed top-0 left-0 right-0 bg-white shadow-md z-40 h-14 flex items-center p-3">
-        <!-- Konten Header akan dirender di sini oleh JS -->
-    </header>
+        </header>
 
-    <!-- Konten Utama Aplikasi -->
     <main id="content-area" class="p-3">
-        <!-- Konten Halaman (Home, Klasemen, Klub, Tentang) akan dirender di sini -->
         <div id="home-page" class="page" data-page="home"></div>
+        <div id="jadwal-page" class="page hidden" data-page="jadwal"></div>
         <div id="klasemen-page" class="page hidden" data-page="klasemen"></div>
         <div id="klub-page" class="page hidden" data-page="klub"></div>
         <div id="tentang-page" class="page hidden" data-page="tentang"></div>
@@ -78,32 +82,33 @@
         </div>
     </main>
 
-    <!-- Navigasi Bawah (Fixed Bottom) -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-40 h-16 flex justify-around items-center border-t border-gray-100">
-        <a href="#" data-page="home" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 active transition-all">
+        <a href="#" data-page="home" class="flex flex-col items-center justify-center w-1/5 h-full text-gray-500 active transition-all">
             <i class="fas fa-home text-xl"></i>
             <span class="text-xs mt-1 font-medium">Home</span>
         </a>
-        <a href="#" data-page="klasemen" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 transition-all">
-            <i class="fas fa-list-ol text-xl"></i>
-            <span class="text-xs mt-1 font-medium">Match</span>
+        <a href="#" data-page="jadwal" class="flex flex-col items-center justify-center w-1/5 h-full text-gray-500 transition-all">
+            <i class="fas fa-calendar-alt text-xl"></i>
+            <span class="text-xs mt-1 font-medium">Jadwal</span>
         </a>
-        <a href="#" data-page="klub" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 transition-all">
+        <a href="#" data-page="klasemen" class="flex flex-col items-center justify-center w-1/5 h-full text-gray-500 transition-all">
+            <i class="fas fa-list-ol text-xl"></i>
+            <span class="text-xs mt-1 font-medium">Klasemen</span>
+        </a>
+        <a href="#" data-page="klub" class="flex flex-col items-center justify-center w-1/5 h-full text-gray-500 transition-all">
             <i class="fas fa-shield-alt text-xl"></i>
             <span class="text-xs mt-1 font-medium">Klub</span>
         </a>
-        <a href="#" data-page="tentang" class="flex flex-col items-center justify-center w-1/4 h-full text-gray-500 transition-all">
+        <a href="#" data-page="tentang" class="flex flex-col items-center justify-center w-1/5 h-full text-gray-500 transition-all">
             <i class="fas fa-info-circle text-xl"></i>
             <span class="text-xs mt-1 font-medium">Tentang</span>
         </a>
     </nav>
 
-    <!-- Modal Dialog untuk Berita -->
     <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4" onclick="closeModal('news-modal')">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-y-auto max-h-[90vh]" onclick="event.stopPropagation()">
-            <div id="news-modal-content" class="p-4">
-                <!-- Konten berita dimuat di sini -->
-            </div>
+            <div id="news-modal-content" class="p-4 relative">
+                </div>
             <button onclick="closeModal('news-modal')" class="absolute top-2 right-2 p-2 bg-gray-100 rounded-full text-gray-600 hover:text-red-500 transition-all">
                 <i class="fas fa-times"></i>
             </button>
@@ -113,1337 +118,1406 @@
 
     <script>
         // ====================================================================
-        // 1. DATA PSSI - Diambil dari sheet yang diberikan
+        // 1. DATA PSSI
         // ====================================================================
 
         const HEADER_DATA = {
             logo_pssi: "https://i.ibb.co.com/gZtpn9GH/Logo-PSSI.png",
-            Judul_kepala: "SIPAKEM - PSSI Mentawai",
+            Judul_kepala: "SIPAKEM - PSSI MENTAWAI",
             logo_askab: "https://i.ibb.co.com/Xf3g5dL4/IMG-20251105-123303.jpg"
         };
-
         const NEWS_DATA = [
             {
                 id_berita: "BRT-001",
-                tanggal: "18/10/2025",
-                Judul_berita: "ffff",
-                isi_berita: "ddddddd",
+                tanggal: "2025-11-02",
+                Judul_berita: "Laporan Pertandingan Awal Musim Mentawai Premier League",
+                isi_berita: "Pertandingan pembuka Mentawai Premier League 2025 telah berlangsung dengan sengit di lapangan Desa Sipora Jaya. Klub MAICON F harus mengakui keunggulan ASTRO MENTAWAI CF dengan skor 1-3. Gol tunggal MAICON dicetak oleh Rima, sementara gol ASTRO dicetak oleh Rita, Yani, dan Andt. Wasit mengeluarkan satu kartu kuning untuk MAICON F. Pertandingan berjalan dengan lancar dan sportif.",
                 gambar_1: "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
                 gambar_2: "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg",
-                gambar_3: "https://i.ibb.co.com/HM79Rd6/IMG-20251112-015205.jpg"
+                gambar_3: "https://i.ibb.co.com/HM79Rd/IMG-20251112-015205.jpg"
+            },
+            {
+                id_berita: "BRT-002",
+                tanggal: "2025-11-20",
+                Judul_berita: "Pendaftaran Pemain Ditutup, 15 Klub Siap Berlaga!",
+                isi_berita: "PSSI Mentawai mengumumkan bahwa masa pendaftaran pemain untuk kompetisi musim ini telah resmi ditutup. Sebanyak 15 klub telah menyelesaikan proses administrasi dan siap bersaing memperebutkan gelar juara. Semua klub diimbau untuk menjaga semangat fair play dan sportivitas selama kompetisi berlangsung.",
+                gambar_1: "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
+                gambar_2: "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg",
+                gambar_3: "https://i.ibb.co.com/HM79Rd/IMG-20251112-015205.jpg"
+            },
+            {
+                id_berita: "BRT-003",
+                tanggal: "2025-10-25",
+                Judul_berita: "Pembukaan Resmi MPL 2025",
+                isi_berita: "Kompetisi Mentawai Premier League (MPL) 2025 resmi dibuka oleh Askab PSSI Kepulauan Mentawai. Acara pembukaan dihadiri oleh perwakilan pemerintah daerah, pengurus PSSI, dan manajer dari klub-klub peserta. Pembukaan ini menandai dimulainya rangkaian pertandingan yang diharapkan dapat memajukan sepak bola di Mentawai.",
+                gambar_1: "https://i.ibb.co.com/1t4P2rN5/IMG-20251112-015057.jpg",
+                gambar_2: "https://i.ibb.co.com/TQ2hm2h/IMG-20251112-015234.jpg",
+                gambar_3: "https://i.ibb.co.com/HM79Rd/IMG-20251112-015205.jpg"
             }
         ];
-
         const RAW_MATCH_DATA = [
-{
-        "id_match": "MATCH-001",
-        "id_kompetisi": "COMP-6231",
-        "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-        "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
-        "tanggal_match": "12/20/2025",
-        "jam": "15:30",
-        "lokasi": "lapangan desa sipora jaya jam 15:30",
-        "id_klub_home": "APM-001",
-        "nama_klub_home": "MAICON F",
-        "logo_klub_home": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
-        "goal_home": 1,
-        "keterangan_goal_home": "rima78",
-        "kartu_merah_home": 0,
-        "keterangan_kartu_merah_home": "-",
-        "kartu_kuning_home": 1,
-        "keterangan_kartu_kuning_home": "-",
-        "poin_home": 0,
-        "poin_away": 3,
-        "keterangan_kartu_kuning_away": "-",
-        "kartu_kuning_away": 0,
-        "keterangan_kartu_merah_away": "-",
-        "kartu_merah_away": 0,
-        "keterangan_goal_away": "rita,yani,andt",
-        "goal_away": 3,
-        "id_klub_away": "APM-005",
-        "nama_klub_away": "ASTRO MENTAWAI CF",
-        "logo_klub_away": "https://i.ibb.co.com/8nNqpGdY/d725e2cbf252.jpg"
-    },
-    {
-        "id_match": "MATCH-001",
-        "id_kompetisi": "COMP-6231",
-        "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-        "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
-        "tanggal_match": "11/29/2025",
-        "jam": "15:30",
-        "lokasi": "lapangan desa sipora jaya",
-        "id_klub_home": "APM-012",
-        "nama_klub_home": "SARAINANTA",
-        "logo_klub_home": "https://i.ibb.co.com/KcTwMPQ3/8a7dc4d7358c.jpg",
-        "goal_home": 3,
-        "keterangan_goal_home": "rima78",
-        "kartu_merah_home": 0,
-        "keterangan_kartu_merah_home": "-",
-        "kartu_kuning_home": 1,
-        "keterangan_kartu_kuning_home": "-",
-        "poin_home": 1,
-        "poin_away": 1,
-        "keterangan_kartu_kuning_away": "-",
-        "kartu_kuning_away": 0,
-        "keterangan_kartu_merah_away": "-",
-        "kartu_merah_away": 0,
-        "keterangan_goal_away": "rita,yani,andt",
-        "goal_away": 3,
-        "id_klub_away": "APM-015",
-        "nama_klub_away": "TRAN MUDA SAKTI FC",
-        "logo_klub_away": "https://i.ibb.co.com/My9C8d4W/logo-default.png"
-    },
-    {
-        "id_match": "MATCH-001",
-        "id_kompetisi": "COMP-6231",
-        "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
-        "babak_pertandingan": "Babak Fase Group Wilayah Sipora Selatan",
-        "tanggal_match": "11/08/2025",
-        "jam": "15:30",
-        "lokasi": "lapangan desa sipora jaya",
-        "id_klub_home": "APM-017",
-        "nama_klub_home": "BAYHILL FC",
-        "logo_klub_home": "https://i.ibb.co.com/MDjcSKK6/1baebdf7fbc0.jpg",
-        "goal_home": 3,
-        "keterangan_goal_home": "rima78",
-        "kartu_merah_home": 0,
-        "keterangan_kartu_merah_home": "-",
-        "kartu_kuning_home": 1,
-        "keterangan_kartu_kuning_home": "-",
-        "poin_home": 3,
-        "poin_away": 0,
-        "keterangan_kartu_kuning_away": "-",
-        "kartu_kuning_away": 0,
-        "keterangan_kartu_merah_away": "-",
-        "kartu_merah_away": 0,
-        "keterangan_goal_away": "rita,yani,andt",
-        "goal_away": 2,
-        "id_klub_away": "APM-001",
-        "nama_klub_away": "MAICON F",
-        "logo_klub_away": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
-    }
+            {
+                "id_match": "MATCH-001",
+                "id_kompetisi": "COMP-6231",
+                "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
+                "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
+                "tanggal_match": "2025-11-29",
+                "jam": "15:30",
+                "lokasi": "lapangan desa sipora jaya",
+                "id_klub_home": "APM-001",
+                "nama_klub_home": "MAICON F",
+                "logo_klub_home": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg",
+                "goal_home": 1,
+                "keterangan_goal_home": "rima78",
+                "kartu_merah_home": 0,
+                "keterangan_kartu_merah_home": "-",
+                "kartu_kuning_home": 1,
+                "keterangan_kartu_kuning_home": "-",
+                "poin_home": 0,
+                "poin_away": 3,
+                "keterangan_kartu_kuning_away": "-",
+                "kartu_kuning_away": 0,
+                "keterangan_kartu_merah_away": "-",
+                "kartu_merah_away": 0,
+                "keterangan_goal_away": "rita,yani,andt",
+                "goal_away": 3,
+                "id_klub_away": "APM-005",
+                "nama_klub_away": "ASTRO MENTAWAI CF",
+                "logo_klub_away": "https://i.ibb.co.com/8nNqpGdY/d725e2cbf252.jpg"
+            },
+            {
+                "id_match": "MATCH-002",
+                "id_kompetisi": "COMP-6231",
+                "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
+                "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
+                "tanggal_match": "2025-11-25",
+                "jam": "15:30",
+                "lokasi": "lapangan desa sipora jaya",
+                "id_klub_home": "APM-012",
+                "nama_klub_home": "SARAINANTA",
+                "logo_klub_home": "https://i.ibb.co.com/KcTwMPQ3/8a7dc4d7358c.jpg",
+                "goal_home": 3,
+                "keterangan_goal_home": "rima78, antu, kiki",
+                "kartu_merah_home": 0,
+                "keterangan_kartu_merah_home": "-",
+                "kartu_kuning_home": 1,
+                "keterangan_kartu_kuning_home": "-",
+                "poin_home": 1,
+                "poin_away": 1,
+                "keterangan_kartu_kuning_away": "-",
+                "kartu_kuning_away": 0,
+                "keterangan_kartu_merah_away": "-",
+                "kartu_merah_away": 0,
+                "keterangan_goal_away": "rita,yani,andt",
+                "goal_away": 3,
+                "id_klub_away": "APM-015",
+                "nama_klub_away": "TRAN MUDA SAKTI FC",
+                "logo_klub_away": "https://i.ibb.co.com/My9C8d4W/logo-default.png"
+            },
+            {
+                "id_match": "MATCH-003",
+                "id_kompetisi": "COMP-6231",
+                "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
+                "babak_pertandingan": "Babak Fase Group Wilayah Sipora Selatan",
+                "tanggal_match": "2025-11-09",
+                "jam": "15:30",
+                "lokasi": "lapangan desa sipora jaya",
+                "id_klub_home": "APM-017",
+                "nama_klub_home": "BAYHILL FC",
+                "logo_klub_home": "https://i.ibb.co.com/MDjcSKK6/1baebdf7fbc0.jpg",
+                "goal_home": 3,
+                "keterangan_goal_home": "jhon, roni, edo",
+                "kartu_merah_home": 0,
+                "keterangan_kartu_merah_home": "-",
+                "kartu_kuning_home": 1,
+                "keterangan_kartu_kuning_home": "-",
+                "poin_home": 3,
+                "poin_away": 0,
+                "keterangan_kartu_kuning_away": "-",
+                "kartu_kuning_away": 0,
+                "keterangan_kartu_merah_away": "-",
+                "kartu_merah_away": 0,
+                "keterangan_goal_away": "rima, anto",
+                "goal_away": 2,
+                "id_klub_away": "APM-001",
+                "nama_klub_away": "MAICON F",
+                "logo_klub_away": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
+            },
+            {
+                "id_match": "MATCH-004",
+                "id_kompetisi": "COMP-6231",
+                "nama_kompetisi": "MENTAWAI PREMIER LEAGUE 2025",
+                "babak_pertandingan": "Babak Fase Group Wilayah Sipora",
+                "tanggal_match": "2025-12-05",
+                "jam": "15:30",
+                "lokasi": "lapangan desa sipora jaya",
+                "id_klub_home": "APM-005",
+                "nama_klub_home": "ASTRO MENTAWAI CF",
+                "logo_klub_home": "https://i.ibb.co.com/8nNqpGdY/d725e2cbf252.jpg",
+                "goal_home": null,
+                "keterangan_goal_home": null,
+                "kartu_merah_home": null,
+                "keterangan_kartu_merah_home": null,
+                "kartu_kuning_home": null,
+                "keterangan_kartu_kuning_home": null,
+                "poin_home": null,
+                "poin_away": null,
+                "keterangan_kartu_kuning_away": null,
+                "kartu_kuning_away": null,
+                "keterangan_kartu_merah_away": null,
+                "kartu_merah_away": null,
+                "keterangan_goal_away": null,
+                "goal_away": null,
+                "id_klub_away": "APM-012",
+                "nama_klub_away": "SARAINANTA",
+                "logo_klub_away": "https://i.ibb.co.com/KcTwMPQ3/8a7dc4d7358c.jpg"
+            }
         ];
 
         const CLUB_DATA = [
-{
-        "id_klub": "APM-001",
-        "nama_klub": "MAICON F",
-        "nama_manajer": "AFRI SURYANTO S,AP",
-        "no_telp_klub": "82283364484",
-        "alamat_klub": "Desa Sido Makmur, sipora utara",
-        "logo_klub": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
-    },
-    {
-        "id_klub": "APM-005",
-        "nama_klub": "ASTRO MENTAWAI CF",
-        "nama_manajer": "none",
-        "no_telp_klub": "none",
-        "alamat_klub": "none",
-        "logo_klub": "https://i.ibb.co.com/8nNqpGdY/d725e2cbf252.jpg"
-    },
-    {
-        "id_klub": "APM-015",
-        "nama_klub": "TRAN MUDA SAKTI FC",
-        "nama_manajer": "none",
-        "no_telp_klub": "none",
-        "alamat_klub": "Desa Sipora Jaya",
-        "logo_klub": "https://i.ibb.co.com/6R8dM6Bj/8733a4ebb1e6.jpg"
-    },
-    {
-        "id_klub": "APM-012",
-        "nama_klub": "SARAINANTA",
-        "nama_manajer": "none",
-        "no_telp_klub": "none",
-        "alamat_klub": "none",
-        "logo_klub": "https://i.ibb.co.com/KcTwMPQ3/8a7dc4d7358c.jpg"
-    },
-    {
-        "id_klub": "APM-017",
-        "nama_klub": "BAYHILL FC",
-        "nama_manajer": "none",
-        "no_telp_klub": "none",
-        "alamat_klub": "none",
-        "logo_klub": "https://i.ibb.co.com/MDjcSKK6/1baebdf7fbc0.jpg"
-    }
+            {
+                "id_klub": "APM-001",
+                "nama_klub": "MAICON F",
+                "nama_manajer": "AFRI SURYANTO S,AP",
+                "no_telp_klub": "82283364484",
+                "alamat_klub": "Desa Sido Makmur, sipora utara",
+                "logo_klub": "https://i.ibb.co.com/V02rLmwm/f37a5f133a9c.jpg"
+            },
+            {
+                "id_klub": "APM-005",
+                "nama_klub": "ASTRO MENTAWAI CF",
+                "nama_manajer": "Budi Santoso",
+                "no_telp_klub": "81234567890",
+                "alamat_klub": "Tuapejat",
+                "logo_klub": "https://i.ibb.co.com/8nNqpGdY/d725e2cbf252.jpg"
+            },
+            {
+                "id_klub": "APM-015",
+                "nama_klub": "TRAN MUDA SAKTI FC",
+                "nama_manajer": "Heri Purnomo",
+                "no_telp_klub": "85211223344",
+                "alamat_klub": "Desa Sipora Jaya",
+                "logo_klub": "https://i.ibb.co.com/My9C8d4W/logo-default.png"
+            },
+            {
+                "id_klub": "APM-012",
+                "nama_klub": "SARAINANTA",
+                "nama_manajer": "Joko Susilo",
+                "no_telp_klub": "87766554433",
+                "alamat_klub": "Desa Sarainanta",
+                "logo_klub": "https://i.ibb.co.com/KcTwMPQ3/8a7dc4d7358c.jpg"
+            },
+            {
+                "id_klub": "APM-017",
+                "nama_klub": "BAYHILL FC",
+                "nama_manajer": "Antonius Simamora",
+                "no_telp_klub": "89988776655",
+                "alamat_klub": "Desa Bayhill",
+                "logo_klub": "https://i.ibb.co.com/MDjcSKK6/1baebdf7fbc0.jpg"
+            }
         ];
-
         const PLAYER_DATA = [
 {
-    "id_pemain": "1111111111111111",
-    "id_klub": "APM-001",
-    "nama_pemain": "MAKMUR HIDAYAT",
-    "tanggal_lahir": "1996-02-06",
-    "no_punggung": 2,
-    "posisi": "Kiper",
-    "nama_punggung": "DAYAT",
-    "pas_photo_pemain": "https://i.ibb.co.com/wFzPthM8/de79f726a8d9.jpg"
-  },
-  {
-    "id_pemain": "1305070609930003",
-    "id_klub": "APM-005",
-    "nama_pemain": "ADHITYA ALFREDO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "2171091009090005",
-    "id_klub": "APM-005",
-    "nama_pemain": "STIVEN GUNAWAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 20,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309040201960000",
-    "id_klub": "APM-005",
-    "nama_pemain": "MUKHLIS ARIFIN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 88,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309082701000002",
-    "id_klub": "APM-005",
-    "nama_pemain": "VANDY SYAH PUTRA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 27,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1371082306950003",
-    "id_klub": "APM-005",
-    "nama_pemain": "YOGI PRATAMA PUTRA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 15,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080102070001",
-    "id_klub": "APM-005",
-    "nama_pemain": "IYOS ILFIAT DUHA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 24,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309083107000001",
-    "id_klub": "APM-005",
-    "nama_pemain": "EFRI SUSANTO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 2,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1305070304950001",
-    "id_klub": "APM-005",
-    "nama_pemain": "ARISMAN CANIAGO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 4,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309022705910003",
-    "id_klub": "APM-005",
-    "nama_pemain": "JUNUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 6,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080606740001",
-    "id_klub": "APM-005",
-    "nama_pemain": "DODI ARIANTO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 42,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081212970003",
-    "id_klub": "APM-005",
-    "nama_pemain": "HENDRO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 10,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1222052912990002",
-    "id_klub": "APM-005",
-    "nama_pemain": "PUTRA GUCI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 9,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081011010002",
-    "id_klub": "APM-005",
-    "nama_pemain": "IKRAL TANJUNG",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 26,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081605980001",
-    "id_klub": "APM-005",
-    "nama_pemain": "FIQRI SABRI ARDIANSYAH",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 7,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081102050001",
-    "id_klub": "APM-005",
-    "nama_pemain": "NAWER GUSLIADI T.",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 47,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080202950002",
-    "id_klub": "APM-005",
-    "nama_pemain": "RAHMAT HIDAYAT",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 19,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080404000001",
-    "id_klub": "APM-005",
-    "nama_pemain": "YUSRAN PADLI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 11,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309083012900001",
-    "id_klub": "APM-005",
-    "nama_pemain": "FERWANDI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 17,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1305012208040003",
-    "id_klub": "APM-005",
-    "nama_pemain": "MHD LATHIF RISQI NUR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 8,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "2172040305080002",
-    "id_klub": "APM-005",
-    "nama_pemain": "MUHAMAD FACHRI ROZI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 25,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080310030001",
-    "id_klub": "APM-005",
-    "nama_pemain": "RAJA SURYA HAKIM",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 14,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1305010805020005",
-    "id_klub": "APM-005",
-    "nama_pemain": "REXY SANDOVAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 12,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309020205970002",
-    "id_klub": "APM-005",
-    "nama_pemain": "TRI ELJANUS BULELE",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 21,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309021202000001",
-    "id_klub": "APM-005",
-    "nama_pemain": "AGI ZAI WANDA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 5,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309021601050001",
-    "id_klub": "APM-005",
-    "nama_pemain": "ROZER SAWGE",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 23,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309052302060001",
-    "id_klub": "APM-015",
-    "nama_pemain": "DAUD ROMENDES",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309083010000000",
-    "id_klub": "APM-015",
-    "nama_pemain": "DENDI SAPUTRA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 12,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080701870007",
-    "id_klub": "APM-015",
-    "nama_pemain": "SURATNA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 75,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081211990001",
-    "id_klub": "APM-015",
-    "nama_pemain": "MUKLIS SETIAWAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 79,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080609960003",
-    "id_klub": "APM-015",
-    "nama_pemain": "SUTRISNO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 5,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081007890001",
-    "id_klub": "APM-015",
-    "nama_pemain": "MISNADI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 90,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309082810980001",
-    "id_klub": "APM-015",
-    "nama_pemain": "ADE SLAMET MUSTOFA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 6,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081503990002",
-    "id_klub": "APM-015",
-    "nama_pemain": "RAGIL PANDUWIJAYA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 55,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080506020001",
-    "id_klub": "APM-015",
-    "nama_pemain": "IRAWAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 27,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309043005100001",
-    "id_klub": "APM-015",
-    "nama_pemain": "TAUFIK HIDAYAT SIRINTOI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 26,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081709020001",
-    "id_klub": "APM-015",
-    "nama_pemain": "ADE BAYU PRIANGGA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 15,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "9271042302930001",
-    "id_klub": "APM-015",
-    "nama_pemain": "MUHAMMAD ARIF",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 24,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081506980002",
-    "id_klub": "APM-015",
-    "nama_pemain": "ROBI GUNAWAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 13,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "3529250501950001",
-    "id_klub": "APM-015",
-    "nama_pemain": "RIFAUL MUJAHIDIN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 4,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080308970001",
-    "id_klub": "APM-015",
-    "nama_pemain": "M FAJAR NOOR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 98,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080510900001",
-    "id_klub": "APM-015",
-    "nama_pemain": "REFANDA OKTAWIRYA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 35,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "5306071703950002",
-    "id_klub": "APM-015",
-    "nama_pemain": "LEDIFAL BAHRUDIN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 22,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309070108070001",
-    "id_klub": "APM-015",
-    "nama_pemain": "ACENG SIRILEMBAI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 9,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080303040001",
-    "id_klub": "APM-015",
-    "nama_pemain": "AMIRUDIN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 17,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081511980002",
-    "id_klub": "APM-015",
-    "nama_pemain": "MAULANA HAKIM",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 10,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309082907010002",
-    "id_klub": "APM-015",
-    "nama_pemain": "IKHWANUL JAMILUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 29,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080310050001",
-    "id_klub": "APM-015",
-    "nama_pemain": "M. BAHRUN NOOR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 7,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081011930002",
-    "id_klub": "APM-015",
-    "nama_pemain": "SURMADI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 93,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081101110002",
-    "id_klub": "APM-015",
-    "nama_pemain": "YOGI ALI MUASIH",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 45,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081803030003",
-    "id_klub": "APM-015",
-    "nama_pemain": "HENDRI PURNAMA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 11,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309031512850001",
-    "id_klub": "APM-012",
-    "nama_pemain": "DESENTINUS AJIK",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309040210960001",
-    "id_klub": "APM-012",
-    "nama_pemain": "ISI DORUS DONI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 27,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080604880001",
-    "id_klub": "APM-012",
-    "nama_pemain": "LIRKAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 3,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309021704040002",
-    "id_klub": "APM-012",
-    "nama_pemain": "MICHAEL",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 7,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "3372052909920007",
-    "id_klub": "APM-012",
-    "nama_pemain": "TARSISIUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 5,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309092412840001",
-    "id_klub": "APM-012",
-    "nama_pemain": "MARLON KRISTIAN SARAGI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 6,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309020908970003",
-    "id_klub": "APM-012",
-    "nama_pemain": "YOSUA SAMALINGGAI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 8,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309092303800002",
-    "id_klub": "APM-012",
-    "nama_pemain": "dr MANIMBANG HALOMOAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 10,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081408780000",
-    "id_klub": "APM-012",
-    "nama_pemain": "LUHUT PARULIAN SARAGI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 14,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "130905131310070001",
-    "id_klub": "APM-012",
-    "nama_pemain": "LIBERTI GOZAY SAKEREBAU",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 13,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309031303980001",
-    "id_klub": "APM-012",
-    "nama_pemain": "LAURENSIUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 16,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309060502940000",
-    "id_klub": "APM-012",
-    "nama_pemain": "ROMULUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 4,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309092510960001",
-    "id_klub": "APM-012",
-    "nama_pemain": "PITTOR ROTUA PURBA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 2,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309031001960001",
-    "id_klub": "APM-012",
-    "nama_pemain": "RUPINUS SALAKKOPA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 23,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1204102310060001",
-    "id_klub": "APM-012",
-    "nama_pemain": "ISMAEL HURA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 12,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309061504890001",
-    "id_klub": "APM-012",
-    "nama_pemain": "DELMIANUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 15,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1371012201850004",
-    "id_klub": "APM-012",
-    "nama_pemain": "NIE DERSEN BERNUAR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 11,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309091901830003",
-    "id_klub": "APM-012",
-    "nama_pemain": "JENDRI MANIK",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 17,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309041805820001",
-    "id_klub": "APM-012",
-    "nama_pemain": "ALAM SUKAR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 22,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "13090722038500001",
-    "id_klub": "APM-012",
-    "nama_pemain": "TARIANUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 25,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309032607730001",
-    "id_klub": "APM-012",
-    "nama_pemain": "ALBERTUS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 9,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309022809060001",
-    "id_klub": "APM-012",
-    "nama_pemain": "GLEN KEVIN TASIR",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 30,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309060707910002",
-    "id_klub": "APM-012",
-    "nama_pemain": "JULIARDI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 18,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309060707910002",
-    "id_klub": "APM-012",
-    "nama_pemain": "ELBERTIN CHRISMENTA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 19,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1307052509920001",
-    "id_klub": "APM-017",
-    "nama_pemain": "HIDAYATUL MUSDA (GK)",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 25,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1308070204880002",
-    "id_klub": "APM-017",
-    "nama_pemain": "ELWARDI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 29,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1310012103890001",
-    "id_klub": "APM-017",
-    "nama_pemain": "AGRES PERMANA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 7,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081110980001",
-    "id_klub": "APM-017",
-    "nama_pemain": "YALDI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 98,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1301083011000001",
-    "id_klub": "APM-017",
-    "nama_pemain": "NOVAL RAHMANDA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 30,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1371090901090003",
-    "id_klub": "APM-017",
-    "nama_pemain": "MUHAMMAD DAFFA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 19,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1201032204890004",
-    "id_klub": "APM-017",
-    "nama_pemain": "SANUGRAH HARTO PANGGABEAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 22,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1301080209020007",
-    "id_klub": "APM-017",
-    "nama_pemain": "SANDRO RISALDI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 12,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1201020207990002",
-    "id_klub": "APM-017",
-    "nama_pemain": "BONARDO SITUMEANG",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 17,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309082809930002",
-    "id_klub": "APM-017",
-    "nama_pemain": "DILAN PRAMANA RAHARJA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 11,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309100503080001",
-    "id_klub": "APM-017",
-    "nama_pemain": "MICHAEL SAOGO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 3,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081205960001",
-    "id_klub": "APM-017",
-    "nama_pemain": "SUHENDRA TATUBEKET",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 21,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309081807910001",
-    "id_klub": "APM-017",
-    "nama_pemain": "EFRI WARDANI AFRIZAL",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 18,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "3171031406101010",
-    "id_klub": "APM-017",
-    "nama_pemain": "FARHAN KURNIAWAN (GK)",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 13,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309084604080001",
-    "id_klub": "APM-017",
-    "nama_pemain": "APRIL REHAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 15,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309020509960002",
-    "id_klub": "APM-017",
-    "nama_pemain": "NOVRIANTO",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 96,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309032806930002",
-    "id_klub": "APM-017",
-    "nama_pemain": "SINDY RAHMAN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 2,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1403092308006107",
-    "id_klub": "APM-017",
-    "nama_pemain": "TEGUH HIDAYAT",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 44,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1301082906990002",
-    "id_klub": "APM-017",
-    "nama_pemain": "JODY SANDIKO P",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 80,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309050305070001",
-    "id_klub": "APM-017",
-    "nama_pemain": "JULKIFLI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 4,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309082407920001",
-    "id_klub": "APM-017",
-    "nama_pemain": "TRISUTRISNO (GK)",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 20,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309092604940001",
-    "id_klub": "APM-017",
-    "nama_pemain": "STEVEN DE NACHS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 10,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309022408010001",
-    "id_klub": "APM-017",
-    "nama_pemain": "TEDDY FAUZANA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 24,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080302100002",
-    "id_klub": "APM-017",
-    "nama_pemain": "ERWAN DAMHURI",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 5,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1301020810950001",
-    "id_klub": "APM-017",
-    "nama_pemain": "SAYYID SUTAN S A",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 78,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309080101860004",
-    "id_klub": "APM-017",
-    "nama_pemain": "ASEP HUDAYA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1000,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1375011406870001",
-    "id_klub": "APM-017",
-    "nama_pemain": "HARIYA WIGA NANDA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1000,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1375011406870001",
-    "id_klub": "APM-017",
-    "nama_pemain": "HENGKY KURNIA",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1000,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309032804950001",
-    "id_klub": "APM-017",
-    "nama_pemain": "ALI ARIPIN",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1000,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  },
-  {
-    "id_pemain": "1309092604940001",
-    "id_klub": "APM-017",
-    "nama_pemain": "STEVEN DE NACHS",
-    "tanggal_lahir": "1920-02-06",
-    "no_punggung": 1000,
-    "posisi": "none",
-    "nama_punggung": "none",
-    "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
-  }
+        "id_pemain": "1111111111111111",
+        "id_klub": "APM-001",
+        "nama_pemain": "MAKMUR HIDAYAT",
+        "tanggal_lahir": "1996-02-06",
+        "no_punggung": 2,
+        "posisi": "Kiper",
+        "nama_punggung": "DAYAT",
+        "pas_photo_pemain": "https://i.ibb.co.com/wFzPthM8/de79f726a8d9.jpg"
+    },
+    {
+        "id_pemain": "1305070609930003",
+        "id_klub": "APM-005",
+        "nama_pemain": "ADHITYA ALFREDO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "2171091009090005",
+        "id_klub": "APM-005",
+        "nama_pemain": "STIVEN GUNAWAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 20,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309040201960000",
+        "id_klub": "APM-005",
+        "nama_pemain": "MUKHLIS ARIFIN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 88,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309082701000002",
+        "id_klub": "APM-005",
+        "nama_pemain": "VANDY SYAH PUTRA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 27,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1371082306950003",
+        "id_klub": "APM-005",
+        "nama_pemain": "YOGI PRATAMA PUTRA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 15,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080102070001",
+        "id_klub": "APM-005",
+        "nama_pemain": "IYOS ILFIAT DUHA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 24,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309083107000001",
+        "id_klub": "APM-005",
+        "nama_pemain": "EFRI SUSANTO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 2,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1305070304950001",
+        "id_klub": "APM-005",
+        "nama_pemain": "ARISMAN CANIAGO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 4,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309022705910003",
+        "id_klub": "APM-005",
+        "nama_pemain": "JUNUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 6,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080606740001",
+        "id_klub": "APM-005",
+        "nama_pemain": "DODI ARIANTO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 42,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081212970003",
+        "id_klub": "APM-005",
+        "nama_pemain": "HENDRO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 10,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1222052912990002",
+        "id_klub": "APM-005",
+        "nama_pemain": "PUTRA GUCI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 9,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081011010002",
+        "id_klub": "APM-005",
+        "nama_pemain": "IKRAL TANJUNG",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 26,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081605980001",
+        "id_klub": "APM-005",
+        "nama_pemain": "FIQRI SABRI ARDIANSYAH",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 7,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081102050001",
+        "id_klub": "APM-005",
+        "nama_pemain": "NAWER GUSLIADI T.",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 47,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080202950002",
+        "id_klub": "APM-005",
+        "nama_pemain": "RAHMAT HIDAYAT",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 19,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080404000001",
+        "id_klub": "APM-005",
+        "nama_pemain": "YUSRAN PADLI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 11,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309083012900001",
+        "id_klub": "APM-005",
+        "nama_pemain": "FERWANDI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 17,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1305012208040003",
+        "id_klub": "APM-005",
+        "nama_pemain": "MHD LATHIF RISQI NUR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 8,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "2172040305080002",
+        "id_klub": "APM-005",
+        "nama_pemain": "MUHAMAD FACHRI ROZI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 25,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080310030001",
+        "id_klub": "APM-005",
+        "nama_pemain": "RAJA SURYA HAKIM",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 14,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1305010805020005",
+        "id_klub": "APM-005",
+        "nama_pemain": "REXY SANDOVAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 12,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309020205970002",
+        "id_klub": "APM-005",
+        "nama_pemain": "TRI ELJANUS BULELE",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 21,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309021202000001",
+        "id_klub": "APM-005",
+        "nama_pemain": "AGI ZAI WANDA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 5,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309021601050001",
+        "id_klub": "APM-005",
+        "nama_pemain": "ROZER SAWGE",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 23,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309052302060001",
+        "id_klub": "APM-015",
+        "nama_pemain": "DAUD ROMENDES",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309083010000000",
+        "id_klub": "APM-015",
+        "nama_pemain": "DENDI SAPUTRA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 12,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080701870007",
+        "id_klub": "APM-015",
+        "nama_pemain": "SURATNA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 75,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081211990001",
+        "id_klub": "APM-015",
+        "nama_pemain": "MUKLIS SETIAWAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 79,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080609960003",
+        "id_klub": "APM-015",
+        "nama_pemain": "SUTRISNO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 5,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081007890001",
+        "id_klub": "APM-015",
+        "nama_pemain": "MISNADI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 90,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309082810980001",
+        "id_klub": "APM-015",
+        "nama_pemain": "ADE SLAMET MUSTOFA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 6,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081503990002",
+        "id_klub": "APM-015",
+        "nama_pemain": "RAGIL PANDUWIJAYA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 55,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080506020001",
+        "id_klub": "APM-015",
+        "nama_pemain": "IRAWAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 27,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309043005100001",
+        "id_klub": "APM-015",
+        "nama_pemain": "TAUFIK HIDAYAT SIRINTOI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 26,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081709020001",
+        "id_klub": "APM-015",
+        "nama_pemain": "ADE BAYU PRIANGGA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 15,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "9271042302930001",
+        "id_klub": "APM-015",
+        "nama_pemain": "MUHAMMAD ARIF",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 24,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081506980002",
+        "id_klub": "APM-015",
+        "nama_pemain": "ROBI GUNAWAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 13,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "3529250501950001",
+        "id_klub": "APM-015",
+        "nama_pemain": "RIFAUL MUJAHIDIN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 4,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080308970001",
+        "id_klub": "APM-015",
+        "nama_pemain": "M FAJAR NOOR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 98,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080510900001",
+        "id_klub": "APM-015",
+        "nama_pemain": "REFANDA OKTAWIRYA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 35,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "5306071703950002",
+        "id_klub": "APM-015",
+        "nama_pemain": "LEDIFAL BAHRUDIN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 22,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309070108070001",
+        "id_klub": "APM-015",
+        "nama_pemain": "ACENG SIRILEMBAI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 9,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080303040001",
+        "id_klub": "APM-015",
+        "nama_pemain": "AMIRUDIN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 17,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081511980002",
+        "id_klub": "APM-015",
+        "nama_pemain": "MAULANA HAKIM",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 10,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309082907010002",
+        "id_klub": "APM-015",
+        "nama_pemain": "IKHWANUL JAMILUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 29,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080310050001",
+        "id_klub": "APM-015",
+        "nama_pemain": "M. BAHRUN NOOR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 7,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081011930002",
+        "id_klub": "APM-015",
+        "nama_pemain": "SURMADI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 93,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081101110002",
+        "id_klub": "APM-015",
+        "nama_pemain": "YOGI ALI MUASIH",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 45,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081803030003",
+        "id_klub": "APM-015",
+        "nama_pemain": "HENDRI PURNAMA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 11,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309031512850001",
+        "id_klub": "APM-012",
+        "nama_pemain": "DESENTINUS AJIK",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309040210960001",
+        "id_klub": "APM-012",
+        "nama_pemain": "ISI DORUS DONI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 27,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080604880001",
+        "id_klub": "APM-012",
+        "nama_pemain": "LIRKAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 3,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309021704040002",
+        "id_klub": "APM-012",
+        "nama_pemain": "MICHAEL",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 7,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "3372052909920007",
+        "id_klub": "APM-012",
+        "nama_pemain": "TARSISIUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 5,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309092412840001",
+        "id_klub": "APM-012",
+        "nama_pemain": "MARLON KRISTIAN SARAGI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 6,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309020908970003",
+        "id_klub": "APM-012",
+        "nama_pemain": "YOSUA SAMALINGGAI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 8,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309092303800002",
+        "id_klub": "APM-012",
+        "nama_pemain": "dr MANIMBANG HALOMOAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 10,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081408780000",
+        "id_klub": "APM-012",
+        "nama_pemain": "LUHUT PARULIAN SARAGI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 14,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "130905131310070001",
+        "id_klub": "APM-012",
+        "nama_pemain": "LIBERTI GOZAY SAKEREBAU",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 13,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309031303980001",
+        "id_klub": "APM-012",
+        "nama_pemain": "LAURENSIUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 16,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309060502940000",
+        "id_klub": "APM-012",
+        "nama_pemain": "ROMULUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 4,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309092510960001",
+        "id_klub": "APM-012",
+        "nama_pemain": "PITTOR ROTUA PURBA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 2,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309031001960001",
+        "id_klub": "APM-012",
+        "nama_pemain": "RUPINUS SALAKKOPA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 23,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1204102310060001",
+        "id_klub": "APM-012",
+        "nama_pemain": "ISMAEL HURA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 12,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309061504890001",
+        "id_klub": "APM-012",
+        "nama_pemain": "DELMIANUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 15,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1371012201850004",
+        "id_klub": "APM-012",
+        "nama_pemain": "NIE DERSEN BERNUAR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 11,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309091901830003",
+        "id_klub": "APM-012",
+        "nama_pemain": "JENDRI MANIK",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 17,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309041805820001",
+        "id_klub": "APM-012",
+        "nama_pemain": "ALAM SUKAR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 22,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "13090722038500001",
+        "id_klub": "APM-012",
+        "nama_pemain": "TARIANUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 25,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309032607730001",
+        "id_klub": "APM-012",
+        "nama_pemain": "ALBERTUS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 9,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309022809060001",
+        "id_klub": "APM-012",
+        "nama_pemain": "GLEN KEVIN TASIR",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 30,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309060707910002",
+        "id_klub": "APM-012",
+        "nama_pemain": "JULIARDI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 18,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309060707910002",
+        "id_klub": "APM-012",
+        "nama_pemain": "ELBERTIN CHRISMENTA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 19,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1307052509920001",
+        "id_klub": "APM-017",
+        "nama_pemain": "HIDAYATUL MUSDA (GK)",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 25,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1308070204880002",
+        "id_klub": "APM-017",
+        "nama_pemain": "ELWARDI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 29,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1310012103890001",
+        "id_klub": "APM-017",
+        "nama_pemain": "AGRES PERMANA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 7,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081110980001",
+        "id_klub": "APM-017",
+        "nama_pemain": "YALDI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 98,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1301083011000001",
+        "id_klub": "APM-017",
+        "nama_pemain": "NOVAL RAHMANDA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 30,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1371090901090003",
+        "id_klub": "APM-017",
+        "nama_pemain": "MUHAMMAD DAFFA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 19,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1201032204890004",
+        "id_klub": "APM-017",
+        "nama_pemain": "SANUGRAH HARTO PANGGABEAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 22,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1301080209020007",
+        "id_klub": "APM-017",
+        "nama_pemain": "SANDRO RISALDI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 12,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1201020207990002",
+        "id_klub": "APM-017",
+        "nama_pemain": "BONARDO SITUMEANG",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 17,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309082809930002",
+        "id_klub": "APM-017",
+        "nama_pemain": "DILAN PRAMANA RAHARJA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 11,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309100503080001",
+        "id_klub": "APM-017",
+        "nama_pemain": "MICHAEL SAOGO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 3,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081205960001",
+        "id_klub": "APM-017",
+        "nama_pemain": "SUHENDRA TATUBEKET",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 21,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309081807910001",
+        "id_klub": "APM-017",
+        "nama_pemain": "EFRI WARDANI AFRIZAL",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 18,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "3171031406101010",
+        "id_klub": "APM-017",
+        "nama_pemain": "FARHAN KURNIAWAN (GK)",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 13,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309084604080001",
+        "id_klub": "APM-017",
+        "nama_pemain": "APRIL REHAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 15,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309020509960002",
+        "id_klub": "APM-017",
+        "nama_pemain": "NOVRIANTO",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 96,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309032806930002",
+        "id_klub": "APM-017",
+        "nama_pemain": "SINDY RAHMAN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 2,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1403092308006107",
+        "id_klub": "APM-017",
+        "nama_pemain": "TEGUH HIDAYAT",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 44,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1301082906990002",
+        "id_klub": "APM-017",
+        "nama_pemain": "JODY SANDIKO P",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 80,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309050305070001",
+        "id_klub": "APM-017",
+        "nama_pemain": "JULKIFLI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 4,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309082407920001",
+        "id_klub": "APM-017",
+        "nama_pemain": "TRISUTRISNO (GK)",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 20,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309092604940001",
+        "id_klub": "APM-017",
+        "nama_pemain": "STEVEN DE NACHS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 10,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309022408010001",
+        "id_klub": "APM-017",
+        "nama_pemain": "TEDDY FAUZANA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 24,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080302100002",
+        "id_klub": "APM-017",
+        "nama_pemain": "ERWAN DAMHURI",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 5,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1301020810950001",
+        "id_klub": "APM-017",
+        "nama_pemain": "SAYYID SUTAN S A",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 78,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309080101860004",
+        "id_klub": "APM-017",
+        "nama_pemain": "ASEP HUDAYA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1000,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1375011406870001",
+        "id_klub": "APM-017",
+        "nama_pemain": "HARIYA WIGA NANDA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1000,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1375011406870001",
+        "id_klub": "APM-017",
+        "nama_pemain": "HENGKY KURNIA",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1000,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309032804950001",
+        "id_klub": "APM-017",
+        "nama_pemain": "ALI ARIPIN",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1000,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    },
+    {
+        "id_pemain": "1309092604940001",
+        "id_klub": "APM-017",
+        "nama_pemain": "STEVEN DE NACHS",
+        "tanggal_lahir": "1920-02-06",
+        "no_punggung": 1000,
+        "posisi": "none",
+        "nama_punggung": "none",
+        "pas_photo_pemain": "https://i.ibb.co.com/Q7FXPsXL/default-pas-photo-1.jpg"
+    }
         ];
-
-        const OFFICIAL_DATA = [
-            {
-                id_official: "1111111111111111",
-                id_klub: "APM-001",
-                nama_official: "YASMIN",
-                tanggal_lahir: "2018-10-22",
-                jabatan: "Pelatih",
-                pas_photo_official: "https://i.ibb.co.com/Vc0tD99W/1d61fd9785fb.png"
-            }
-        ];
-
-        const COMPETITION_DATA = [
-            {
-                id_kompetisi: "COMP-6231",
-                nama_kompetisi: "MENTAWAI PREMIER LEAGUE 2025",
-                umur_maksimal: 80,
-                tanggal_awal_pendaftaran: "2025-11-17",
-                tanggal_akhir_pendaftaran: "2025-12-01",
-                url_logo_liga: "https://i.ibb.co.com/whSSR80B/b875b5043f80.png",
-                deskripsi: "KOMPETISI LIGA ASKAB MENTAWAI"
-            }
-        ];
-
-        const SLIDE_DATA = [
-            "https://i.ibb.co.com/7xZwq739/IMG-20251112-004726.jpg",
-            "https://i.ibb.co.com/Rkgtqd8L/1762812029886.jpg",
-            "https://i.ibb.co.com/23z5JLwp/1762812023240.jpg"
-        ];
-
-        const ABOUT_DATA = {
-            nama_organisasi: "ASOSIASI KABUPATE PSSI KEPULAUAN MENTAWAI",
-            tanggal_berdiri: "03-11-2020",
-            visi: "Menjadikan Sepak Bola di Kepulauan Mentawai sebagai Cabang Olahraga Unggulan yang Berprestasi Nasional, Berkarakter Kuat, dan Mampu Menjadi Sarana Pemersatu serta Promosi Potensi Daerah.",
-            misi: `
-            Untuk mencapai Visi diatas, kami berkomitmen melaksanakan misi-misi berikut:
-
-​1. Pembinaan Usia Dini dan Pengembangan Bakat
-​Mengembangkan program pembinaan sepak bola usia dini dan grassroot yang berkelanjutan di seluruh kecamatan di Kepulauan Mentawai.
-​Mengadakan kompetisi dan turnamen berjenjang secara rutin untuk memberikan jam terbang dan memantau bakat-bakat muda.
-​Bekerja sama dengan sekolah dan komunitas untuk membentuk sentra-sentra pelatihan (Sekolah Sepak Bola/SSB) yang terstandarisasi.
-
-​2. Peningkatan Kualitas Sumber Daya Manusia
-​Melaksanakan pelatihan dan sertifikasi bagi pelatih dan wasit lokal sesuai standar PSSI.
-​Mendorong peningkatan pengetahuan dan keterampilan pengurus klub/anggota dalam aspek manajemen dan organisasi sepak bola profesional.
-​Membangun database pemain, pelatih, dan wasit Kepulauan Mentawai yang terintegrasi dan akuntabel.
-
-​3. Peningkatan Infrastruktur dan Fasilitas
-​Mendorong Pemerintah Daerah untuk merevitalisasi dan membangun sarana serta prasarana lapangan sepak bola yang layak dan representatif di berbagai pulau.
-​Mengupayakan ketersediaan peralatan pelatihan yang memadai dan modern untuk mendukung proses latihan.
-
-​4. Penguatan Organisasi dan Tata Kelola
-​Menciptakan tata kelola organisasi yang profesional, transparan, dan akuntabel.
-​Memperkuat sinergi dan komunikasi yang efektif antara ASKAB PSSI, klub-klub anggota, Pemerintah Daerah, dan pihak swasta (sponsor).
-​Memastikan kepatuhan klub anggota terhadap regulasi dan statuta PSSI.
-
-​5. Pencapaian Prestasi
-​Membentuk dan mempersiapkan tim perwakilan Kepulauan Mentawai (senior dan junior) yang kompetitif untuk berlaga di tingkat provinsi (Liga 3 Asprov Sumatera Barat) dan nasional.
-​Menciptakan iklim kompetisi lokal yang sehat, bersemangat, dan menjunjung tinggi sportivitas.
-`,
-            ketua: "Martinus Dahlan",
-            wakil_ketua: "Syahroni Wardoyo S.Sos",
-            sekretaris: "Rinaldi Kaslan Amd",
-            bendahara: "Eranita Matondang S.E",
-            humas: "Demian Zega S.sos",
-            media: "Ardian Humaiza S.Kom"
-        };
-
-        const ADMIN_LOGIN_URL = "https://hamudhabibi2025.github.io/nbxevwinrrhcuerhmgr";
-
+        
         // ====================================================================
-        // 2. STATE DAN UTILITY
+        // 2. LOGIC DAN UTILITY BARU (Klasemen dan Countdown)
         // ====================================================================
+        
+        // Utility: Tambahkan nol di depan angka untuk format waktu yang lebih baik
+        function pad(num) {
+            return num < 10 ? '0' + num : num;
+        }
 
-        let currentPage = 'home';
-        let detailData = {}; // Untuk menyimpan data detail klub/match yang sedang dilihat
-        let historyStack = ['home']; // Stack untuk mengelola riwayat halaman internal
+        // Utility: Mengubah format tanggal DD/MM/YYYY atau YYYY-MM-DD menjadi Date object 
+        function parseDate(dateString) { 
+            if (!dateString) return null; 
+            if (dateString.includes('/')) { 
+                const [day, month, year] = dateString.split('/'); 
+                return new Date(`${year}-${month}-${day}`); 
+            } else if (dateString.includes('-')) { 
+                // Asumsi format YYYY-MM-DD
+                const [year, month, day] = dateString.split('-'); 
+                // Perlu disesuaikan karena bulan di JS dimulai dari 0 (Januari)
+                return new Date(year, month - 1, day); 
+            } 
+            return null; 
+        } 
+        
+        // Utility: Menghitung umur dari tanggal lahir (YYYY-MM-DD) 
+        function calculateAge(dateString) { 
+            const birthDate = parseDate(dateString); 
+            if (!birthDate) return 'N/A'; 
+            const today = new Date(); 
+            let age = today.getFullYear() - birthDate.getFullYear(); 
+            const monthDifference = today.getMonth() - birthDate.getMonth(); 
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) { 
+                age--; 
+            } 
+            return age; 
+        } 
 
-        // Utility untuk membersihkan dan menstandarkan data match
+        // Function: Menghitung Klasemen dari data pertandingan (RAW_MATCH_DATA)
+        function calculateStandings(matchData, clubData) {
+            const standingsByRound = {};
+            const clubMap = clubData.reduce((map, club) => {
+                map[club.id_klub] = club;
+                return map;
+            }, {});
+
+            matchData.forEach(match => {
+                const round = match.babak_pertandingan;
+                
+                // Hanya proses pertandingan yang sudah selesai (memiliki goal/poin)
+                if (match.poin_home === null || match.poin_away === null) return;
+
+                if (!standingsByRound[round]) {
+                    standingsByRound[round] = {};
+                }
+
+                const stats = (id) => standingsByRound[round][id] || {
+                    id_klub: id,
+                    nama_klub: clubMap[id] ? clubMap[id].nama_klub : `Klub Tidak Dikenal (${id})`,
+                    logo_klub: clubMap[id] ? clubMap[id].logo_klub : 'https://placehold.co/50x50/e2e8f0/64748b?text=K',
+                    P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, GD: 0, PTS: 0
+                };
+
+                const homeStats = stats(match.id_klub_home);
+                const awayStats = stats(match.id_klub_away);
+                
+                // Update Played (P)
+                homeStats.P++;
+                awayStats.P++;
+
+                // Update Goals (GF/GA)
+                const homeGoal = match.goal_home || 0;
+                const awayGoal = match.goal_away || 0;
+
+                homeStats.GF += homeGoal;
+                homeStats.GA += awayGoal;
+                awayStats.GF += awayGoal;
+                awayStats.GA += homeGoal;
+                
+                // Update W/D/L/PTS menggunakan Poin yang tersedia di data
+                homeStats.PTS += match.poin_home;
+                awayStats.PTS += match.poin_away;
+                
+                if (match.poin_home === 3) {
+                    homeStats.W++; awayStats.L++;
+                } else if (match.poin_away === 3) {
+                    awayStats.W++; homeStats.L++;
+                } else if (match.poin_home === 1 && match.poin_away === 1) {
+                    homeStats.D++; awayStats.D++;
+                } // Asumsi 0 poin berarti kalah, sudah tercakup oleh Poin 3/1
+
+                // Update Goal Difference (GD)
+                homeStats.GD = homeStats.GF - homeStats.GA;
+                awayStats.GD = awayStats.GF - awayStats.GA;
+                
+                // Save back to standings object
+                standingsByRound[round][match.id_klub_home] = homeStats;
+                standingsByRound[round][match.id_klub_away] = awayStats;
+            });
+
+            // Convert objects to sorted arrays
+            for (const round in standingsByRound) {
+                let standingsArray = Object.values(standingsByRound[round]);
+                // Sorting: 1. Points (DESC), 2. Goal Difference (DESC), 3. Goals For (DESC), 4. Club Name (ASC)
+                standingsArray.sort((a, b) => {
+                    if (b.PTS !== a.PTS) return b.PTS - a.PTS;
+                    if (b.GD !== a.GD) return b.GD - a.GD;
+                    if (b.GF !== a.GF) return b.GF - a.GF;
+                    return a.nama_klub.localeCompare(b.nama_klub);
+                });
+                standingsByRound[round] = standingsArray;
+            }
+
+            return standingsByRound;
+        }
+
+        
+        // ====================================================================
+        // 3. DATA PROCESSING
+        // ====================================================================
+        
+        // Utility: Sorting berita berdasarkan tanggal terbaru 
+        const SORTED_NEWS = NEWS_DATA.sort((a, b) => { 
+            const dateA = parseDate(a.tanggal); 
+            const dateB = parseDate(b.tanggal); 
+            // Handle null/invalid dates if necessary
+            if (!dateA || !dateB) return 0;
+            return dateB - dateA; // Descending 
+        });
+
         const MATCH_DATA = RAW_MATCH_DATA.map(match => {
             // Menggabungkan tanggal dan jam menjadi objek Date
-            const [month, day, year] = match.tanggal_match.split('/');
-            const [hour, minute] = match.jam.split(':');
-            const dateStr = `${year}-${month}-${day}T${hour}:${minute}:00`;
+            const dateStr = `${match.tanggal_match}T${match.jam}:00`;
             match.dateTime = new Date(dateStr);
-            match.isUpcoming = match.dateTime > new Date();
+            // Bandingkan dengan waktu saat ini (menggunakan buffer 90 menit untuk 'selesai')
+            const timeDiff = match.dateTime.getTime() - new Date().getTime();
+            // isUpcoming: true jika match belum lewat, atau baru dimulai (misal: dalam 90 menit setelah jam mulai)
+            match.isUpcoming = timeDiff > -(1000 * 60 * 90); 
             return match;
         });
+        
+        const STANDINGS_DATA = calculateStandings(RAW_MATCH_DATA, CLUB_DATA);
 
-        // Utility: Mengubah format tanggal DD/MM/YYYY atau YYYY-MM-DD menjadi Date object
-        function parseDate(dateString) {
-            if (!dateString) return null;
-            if (dateString.includes('/')) {
-                const [day, month, year] = dateString.split('/');
-                return new Date(`${year}-${month}-${day}`);
-            } else if (dateString.includes('-')) {
-                 const [year, month, day] = dateString.split('-');
-                 return new Date(year, month - 1, day);
-            }
-            return null;
-        }
-
-        // Utility: Menghitung umur dari tanggal lahir (YYYY-MM-DD)
-        function calculateAge(dateString) {
-            const birthDate = parseDate(dateString);
-            if (!birthDate) return 'N/A';
-            const today = new Date();
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDifference = today.getMonth() - birthDate.getMonth();
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
-            return age;
-        }
-
-        // Utility: Sorting berita berdasarkan tanggal terbaru
-        const SORTED_NEWS = NEWS_DATA.sort((a, b) => {
-            const dateA = parseDate(a.tanggal);
-            const dateB = parseDate(b.tanggal);
-            return dateB - dateA; // Descending
-        });
-
+        
         // ====================================================================
-        // 3. NAVIGASI DAN HISTORY
+        // 4. NAVIGASI DAN HISTORY
         // ====================================================================
+        
+        let currentPage = 'home';
+        let historyStack = ['home'];
 
         function showPage(pageName, pushToHistory = true, data = null) {
             const allPages = document.querySelectorAll('.page');
@@ -1451,62 +1525,59 @@
             
             // Sembunyikan semua halaman
             allPages.forEach(page => page.classList.add('hidden'));
+            
+            // Atur header default (untuk navigasi utama)
+            if (['home', 'jadwal', 'klasemen', 'klub', 'tentang'].includes(pageName)) {
+                renderHeader();
+            }
 
             // Tampilkan halaman yang diminta
-            const targetPage = document.querySelector(`#${pageName}-page`);
+            const targetPage = document.getElementById(pageName + '-page');
             if (targetPage) {
                 targetPage.classList.remove('hidden');
-                currentPage = pageName;
-
-                // Update detail data jika ada
-                if (data) {
-                    detailData[pageName] = data;
-                }
-
-                // Kelola riwayat
-                if (pushToHistory && historyStack[historyStack.length - 1] !== pageName) {
-                    historyStack.push(pageName);
-                } else if (!pushToHistory && historyStack.length > 1) {
-                    historyStack.pop();
-                }
-
-                // Render konten halaman
-                renderPage(pageName);
+            } else {
+                console.error('Page not found:', pageName);
+                return;
             }
 
-            // Update status aktif navigasi bawah
+            // Atur link navigasi aktif
             navLinks.forEach(link => {
-                link.classList.remove('active', 'text-red-500');
-                link.classList.add('text-gray-500');
-                if (link.dataset.page === getBasePageName(pageName)) {
-                    link.classList.add('active', 'text-red-500');
-                    link.classList.remove('text-gray-500');
+                link.classList.remove('active');
+                if (link.dataset.page === pageName) {
+                    link.classList.add('active');
                 }
             });
-        }
 
-        function getBasePageName(pageName) {
-            // Mengambil nama halaman utama dari halaman detail (e.g., 'klub-detail' -> 'klub')
-            if (pageName.includes('-')) {
-                return pageName.split('-')[0];
+            // Atur history
+            if (pushToHistory) {
+                if (historyStack[historyStack.length - 1] !== pageName) {
+                    historyStack.push(pageName);
+                }
+            } else if (historyStack.length > 1 && historyStack[historyStack.length - 1] !== pageName) {
+                 // Jika back dari detail page ke main page, hapus detail page dari history
+                historyStack = [pageName]; 
             }
-            return pageName;
+            currentPage = pageName;
+            
+            // Render konten
+            renderPage(pageName, data);
         }
 
         function goBack() {
             if (historyStack.length > 1) {
-                historyStack.pop(); // Hapus halaman saat ini
-                const prevPage = historyStack[historyStack.length - 1];
-                // Panggil showPage tanpa pushToHistory
-                showPage(prevPage, false);
+                historyStack.pop();
+                const previousPage = historyStack[historyStack.length - 1];
+                showPage(previousPage, false);
             }
         }
-
-        // Handler tombol kembali perangkat
-        window.onpopstate = function(event) {
-            // Karena kita menggunakan history internal, kita mencegah perilaku default
-            // dan menggunakan fungsi goBack() kita sendiri
-            goBack();
+        
+        // Event listener untuk tombol kembali di header (jika ada)
+        document.getElementById('app-header').onclick = (e) => {
+            const backButton = e.target.closest('#back-button');
+            if(backButton) {
+                e.preventDefault();
+                goBack();
+            }
         };
 
         // Event listener untuk navigasi bawah
@@ -1523,576 +1594,56 @@
             }
         });
 
-        function renderPage(pageName) {
+        function renderPage(pageName, data = null) {
             const pageMap = {
                 'home': renderHome,
+                'jadwal': renderJadwal,
                 'klasemen': renderKlasemen,
                 'klub': renderKlub,
                 'tentang': renderTentang,
-                'klub-detail': renderKlubDetail
+                'klub-detail': renderKlubDetail,
+                'match-detail': renderMatchDetail
             };
-            
+
             if (pageMap[pageName]) {
                 const contentDiv = document.getElementById(`${pageName}-page`);
                 if (contentDiv) {
                     showLoading();
-                    setTimeout(() => { // Simulate API load/render time
-                        pageMap[pageName](contentDiv);
+                    // Gunakan setTimeout 0ms untuk memecah task dan memastikan UI diperbarui
+                    setTimeout(() => { 
+                        pageMap[pageName](contentDiv, data);
                         hideLoading();
-                    }, 100);
+                    }, 0);
                 }
             }
         }
 
-        function showLoading() {
-            document.getElementById('loading-overlay').classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.add('hidden');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-
-        // ====================================================================
-        // 4. RENDER UTAMA
-        // ====================================================================
-
-        function renderHeader() {
-            const headerEl = document.getElementById('app-header');
-            headerEl.innerHTML = `
-                <div class="flex items-center justify-between w-full">
-                    <img src="${HEADER_DATA.logo_pssi}" alt="Logo PSSI" class="w-8 h-8 rounded-full shadow-inner lazy-img" onerror="this.src='https://placehold.co/50x50/e2e8f0/e2e8f0?text=PSSI'">
-                    <h1 class="text-base font-bold text-gray-800 truncate px-2">${HEADER_DATA.Judul_kepala}</h1>
-                    <img src="${HEADER_DATA.logo_askab}" alt="Logo Askab" class="w-8 h-8 rounded-full shadow-inner lazy-img" onerror="this.src='https://placehold.co/50x50/e2e8f0/e2e8f0?text=ASKAB'">
-                </div>
-            `;
-        }
-
-        // ====================================================================
-        // 5. RENDER HOME (Berita)
-        // ====================================================================
-
-        let slideInterval;
-
-        function renderHome(container) {
-            // Hentikan slider lama
-            clearInterval(slideInterval);
-
-            container.innerHTML = `
-                ${renderSearchBar('news-search', 'Cari Berita...')}
-                <div id="slide-container" class="my-4 relative h-48 overflow-hidden rounded-xl shadow-lg">
-                    <div id="slide-track" class="flex w-full h-full transition-transform duration-500 ease-in-out">
-                        ${SLIDE_DATA.map((url, index) => `
-                            <div class="w-full flex-shrink-0 h-full">
-                                <img src="${url}" alt="Banner ${index + 1}" class="lazy-img w-full h-full object-cover" onerror="this.src='https://placehold.co/400x192/e2e8f0/64748b?text=Slide+${index + 1}'">
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                <h2 class="text-lg font-bold text-gray-800 mb-3 mt-5">Berita Terbaru</h2>
-                <div id="news-list" class="space-y-4">
-                    <!-- News cards will be rendered here -->
-                </div>
-            `;
-            
-            // Inisialisasi Slider
-            initSlider();
-
-            // Render daftar berita
-            renderNewsList(SORTED_NEWS);
-
-            // Event listener untuk pencarian
-            document.getElementById('news-search').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                const filteredNews = SORTED_NEWS.filter(news => 
-                    news.Judul_berita.toLowerCase().includes(query) || 
-                    news.isi_berita.toLowerCase().includes(query)
-                );
-                renderNewsList(filteredNews);
-            });
-        }
-
-        function initSlider() {
-            const track = document.getElementById('slide-track');
-            const slides = SLIDE_DATA.length;
-            let currentSlide = 0;
-
-            if (slides === 0) return;
-
-            const updateSlide = () => {
-                currentSlide = (currentSlide + 1) % slides;
-                track.style.transform = `translateX(-${currentSlide * 100}%)`;
-            };
-
-            // Mulai geser otomatis setiap 2 detik
-            slideInterval = setInterval(updateSlide, 2000);
-        }
-
-        function renderNewsList(newsArray) {
-            const newsListEl = document.getElementById('news-list');
-            if (!newsListEl) return;
-            
-            newsListEl.innerHTML = newsArray.map(news => `
-                <div class="bg-white rounded-xl shadow-md overflow-hidden flex items-start p-3 hover:shadow-lg cursor-pointer transition-all" onclick="openNewsModal('${news.id_berita}')">
-                    <img src="${news.gambar_1}" alt="Gambar Berita" class="lazy-img w-20 h-20 object-cover rounded-lg flex-shrink-0 mr-3" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=News'">
-                    <div class="flex-grow">
-                        <p class="text-xs text-gray-500 mb-1">${news.tanggal}</p>
-                        <h3 class="font-semibold text-gray-900 line-clamp-2">${news.Judul_berita}</h3>
-                        <p class="text-sm text-gray-600 mt-1 line-clamp-2">${news.isi_berita.split(' ').slice(0, 20).join(' ')}...</p>
-                    </div>
-                </div>
-            `).join('');
-            
-            if (newsArray.length === 0) {
-                 newsListEl.innerHTML = '<p class="text-center text-gray-500 mt-8">Tidak ada berita yang ditemukan.</p>';
-            }
-        }
-
-        function openNewsModal(newsId) {
-            const news = NEWS_DATA.find(n => n.id_berita === newsId);
-            if (!news) return;
-
-            const content = `
-                <h2 class="text-2xl font-bold mb-2">${news.Judul_berita}</h2>
-                <p class="text-sm text-gray-500 mb-4 border-b pb-2">Tanggal: ${news.tanggal}</p>
-                
-                <div class="space-y-4 mb-6">
-                    ${[news.gambar_1, news.gambar_2, news.gambar_3].filter(url => url).map((url, index) => `
-                        <img src="${url}" alt="Gambar Berita ${index + 1}" class="lazy-img w-full rounded-lg shadow-md" onerror="this.src='https://placehold.co/400x200/e2e8f0/64748b?text=Gambar+${index + 1}'">
-                    `).join('')}
-                </div>
-                
-                <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">${news.isi_berita}</p>
-            `;
-
-            document.getElementById('news-modal-content').innerHTML = content;
-            document.getElementById('news-modal').classList.remove('hidden');
-        }
-
-        // ====================================================================
-        // 6. RENDER KLASEMEN (Match)
-        // ====================================================================
-
-        let countdownInterval;
-
-        function renderKlasemen(container) {
-            clearInterval(countdownInterval); // Hentikan countdown lama
-            
-            const uniqueCompetitions = [...new Set(MATCH_DATA.map(m => m.nama_kompetisi))];
-            
-            container.innerHTML = `
-                ${renderSearchBar('match-search', 'Cari Pertandingan...')}
-                <h2 class="text-lg font-bold text-gray-800 mb-3 mt-5">Pilih Kompetisi</h2>
-                
-                <div id="competition-list" class="grid grid-cols-2 gap-3 mb-6">
-                    ${uniqueCompetitions.map(compName => {
-                        const comp = COMPETITION_DATA.find(c => c.nama_kompetisi === compName) || {};
-                        return `
-                            <div class="bg-white p-4 rounded-xl shadow-md text-center cursor-pointer hover:bg-red-50 transition-all" onclick="renderMatchDetail('${compName}')">
-                                <img src="${comp.url_logo_liga || 'https://placehold.co/80x80/e2e8f0/64748b?text=Liga'}" alt="Logo Liga" class="lazy-img w-12 h-12 mx-auto mb-2 rounded-lg" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=Liga'">
-                                <p class="text-sm font-semibold">${compName}</p>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-
-                <h2 class="text-lg font-bold text-gray-800 mb-3 mt-5">Semua Hasil & Jadwal</h2>
-                <div id="all-matches-list">
-                    <!-- Semua match akan dirender di sini -->
-                </div>
-            `;
-            
-            renderMatchList(MATCH_DATA, 'all-matches-list');
-
-            document.getElementById('match-search').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                const filteredMatches = MATCH_DATA.filter(match => 
-                    match.nama_klub_home.toLowerCase().includes(query) || 
-                    match.nama_klub_away.toLowerCase().includes(query) ||
-                    match.babak_pertandingan.toLowerCase().includes(query)
-                );
-                renderMatchList(filteredMatches, 'all-matches-list');
-            });
+        function showLoading() { 
+            document.getElementById('loading-overlay').classList.remove('hidden'); 
         }
         
-        function renderMatchDetail(compName) {
-            const matches = MATCH_DATA.filter(m => m.nama_kompetisi === compName);
-            const uniqueBabak = [...new Set(matches.map(m => m.babak_pertandingan))];
-            
-            const detailContainer = document.getElementById('klasemen-page');
-            detailContainer.innerHTML = `
-                <button onclick="showPage('klasemen', false)" class="text-red-500 mb-4 block"><i class="fas fa-arrow-left mr-2"></i>Kembali</button>
-                <h1 class="text-xl font-bold mb-4">${compName}</h1>
-                
-                <div id="babak-tabs" class="flex overflow-x-auto space-x-2 mb-4 p-1 rounded-lg bg-white shadow-inner">
-                    ${uniqueBabak.map((babak, index) => `
-                        <button class="babak-tab flex-shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-all ${index === 0 ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}" 
-                                data-babak="${babak}" 
-                                onclick="filterMatchesByBabak(this, '${babak}', '${compName}')">
-                            ${babak}
-                        </button>
-                    `).join('')}
-                </div>
-                
-                <h2 class="text-lg font-bold text-gray-800 mb-3">Jadwal & Hasil Pertandingan</h2>
-                <div id="filtered-matches-list" class="space-y-4">
-                    <!-- Matches for the first babak will be rendered here -->
-                </div>
-            `;
-            
-            // Render match list untuk babak pertama
-            if (uniqueBabak.length > 0) {
-                filterMatchesByBabak(document.querySelector('.babak-tab'), uniqueBabak[0], compName);
-            }
+        function hideLoading() { 
+            document.getElementById('loading-overlay').classList.add('hidden'); 
         }
         
-        function filterMatchesByBabak(el, babak, compName) {
-             document.querySelectorAll('.babak-tab').forEach(btn => {
-                 btn.classList.remove('bg-red-500', 'text-white');
-                 btn.classList.add('bg-gray-100', 'text-gray-600');
-             });
-             el.classList.add('bg-red-500', 'text-white');
-             el.classList.remove('bg-gray-100', 'text-gray-600');
-            
-            const filteredMatches = MATCH_DATA.filter(m => m.nama_kompetisi === compName && m.babak_pertandingan === babak);
-            renderMatchList(filteredMatches, 'filtered-matches-list');
+        function closeModal(modalId) { 
+            document.getElementById(modalId).classList.add('hidden'); 
         }
 
-        function renderMatchList(matches, elementId) {
-            clearInterval(countdownInterval); // Hentikan countdown lama
-            const listEl = document.getElementById(elementId);
-            if (!listEl) return;
+        // ====================================================================
+        // 5. RENDER KOMPONEN UMUM
+        // ====================================================================
 
-            // Sort: Upcoming first, then by date descending
-            matches.sort((a, b) => {
-                if (a.isUpcoming && !b.isUpcoming) return -1;
-                if (!a.isUpcoming && b.isUpcoming) return 1;
-                return b.dateTime - a.dateTime;
-            });
-
-            listEl.innerHTML = matches.map(match => {
-                const statusHtml = match.isUpcoming 
-                    ? `<div class="text-xs font-semibold text-blue-500 mb-2">JADWAL (${match.tanggal_match} ${match.jam})</div><div id="countdown-${match.id_match}" class="text-sm font-bold text-gray-700"></div>`
-                    : `<div class="text-2xl font-black text-red-500">${match.goal_home} - ${match.goal_away}</div><div class="text-xs text-gray-500">SELESAI</div>`;
-                
-                const cardClass = match.isUpcoming ? 'border-blue-500 border-2 bg-blue-50' : 'border-gray-200 border bg-white';
-
-                return `
-                    <div class="p-4 rounded-xl shadow-lg ${cardClass} flex flex-col space-y-3">
-                        <div class="text-xs text-center font-medium text-gray-600 mb-2">${match.nama_kompetisi} - ${match.babak_pertandingan}</div>
-                        ${match.isUpcoming ? `<div class="text-sm text-center font-semibold text-gray-700">${match.lokasi}</div>` : ''}
-
-                        <div class="flex justify-between items-center text-center">
-                            <!-- Klub Home -->
-                            <div class="flex flex-col items-center w-5/12">
-                                <img src="${match.logo_klub_home}" alt="${match.nama_klub_home}" class="lazy-img w-16 h-16 rounded-full shadow-md mb-2" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=H'">
-                                <p class="text-sm font-bold truncate">${match.nama_klub_home}</p>
-                                <p class="text-xs text-gray-500">(${match.id_klub_home})</p>
-                            </div>
-
-                            <!-- Score/Countdown -->
-                            <div class="w-2/12 flex flex-col items-center justify-center">
-                                ${statusHtml}
-                            </div>
-
-                            <!-- Klub Away -->
-                            <div class="flex flex-col items-center w-5/12">
-                                <img src="${match.logo_klub_away}" alt="${match.nama_klub_away}" class="lazy-img w-16 h-16 rounded-full shadow-md mb-2" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=A'">
-                                <p class="text-sm font-bold truncate">${match.nama_klub_away}</p>
-                                <p class="text-xs text-gray-500">(${match.id_klub_away})</p>
-                            </div>
-                        </div>
-                        
-                        ${!match.isUpcoming ? renderMatchDetailSummary(match) : ''}
-                    </div>
-                `;
-            }).join('');
-            
-            // Start countdowns if needed
-            if (matches.some(m => m.isUpcoming)) {
-                countdownInterval = setInterval(() => updateCountdowns(matches), 1000);
-            }
-            
-            if (matches.length === 0) {
-                 listEl.innerHTML = '<p class="text-center text-gray-500 mt-8">Tidak ada pertandingan ditemukan.</p>';
-            }
+        function renderHeader() { 
+            const headerEl = document.getElementById('app-header'); 
+            headerEl.innerHTML = ` 
+                <div class="flex items-center justify-between w-full"> 
+                    <img src="${HEADER_DATA.logo_pssi}" alt="Logo PSSI" class="w-8 h-8 rounded-full shadow-inner lazy-img" onerror="this.src='https://placehold.co/50x50/e2e8f0/e2e8f0?text=PSSI'"> 
+                    <h1 class="text-base font-bold text-gray-800 truncate px-2">${HEADER_DATA.Judul_kepala}</h1> 
+                    <img src="${HEADER_DATA.logo_askab}" alt="Logo Askab" class="w-8 h-8 rounded-full shadow-inner lazy-img" onerror="this.src='https://placehold.co/50x50/e2e8f0/e2e8f0?text=ASKAB'"> 
+                </div> `; 
         }
         
-        function renderMatchDetailSummary(match) {
-            return `
-                <div class="pt-3 border-t border-gray-100 mt-3">
-                    <div class="flex justify-between text-xs font-semibold mb-2">
-                        <span>Poin: ${match.poin_home}</span>
-                        <span>Poin: ${match.poin_away}</span>
-                    </div>
-                    <div class="text-xs text-gray-700 space-y-1">
-                        <p><strong>Gol Home:</strong> ${match.keterangan_goal_home || '-'}</p>
-                        <p><strong>Gol Away:</strong> ${match.keterangan_goal_away || '-'}</p>
-                        <p><strong>Kartu Kuning:</strong> ${match.kartu_kuning_home} vs ${match.kartu_kuning_away}</p>
-                        <p><strong>Kartu Merah:</strong> ${match.kartu_merah_home} vs ${match.kartu_merah_away}</p>
-                    </div>
-                </div>
-            `;
-        }
-
-        function updateCountdowns(matches) {
-            matches.filter(m => m.isUpcoming).forEach(match => {
-                const countdownEl = document.getElementById(`countdown-${match.id_match}`);
-                if (!countdownEl) return;
-
-                const now = new Date().getTime();
-                const distance = match.dateTime.getTime() - now;
-
-                if (distance < 0) {
-                    countdownEl.innerHTML = "SEDANG BERLANGSUNG";
-                    // Jika match sudah lewat, hapus countdown dan panggil render ulang match list
-                    if (distance < -60000) { // Lebih dari 1 menit lalu
-                         match.isUpcoming = false;
-                         // Panggil render ulang untuk memuat hasil match (simulasi)
-                    }
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                countdownEl.innerHTML = `${days} H   ${hours} J   ${minutes} M   ${seconds} D`;
-            });
-        }
-
-        // ====================================================================
-        // 7. RENDER KLUB
-        // ====================================================================
-
-        function renderKlub(container) {
-            container.innerHTML = `
-                ${renderSearchBar('club-search', 'Cari Klub/Pemain/Official...')}
-                <h2 class="text-lg font-bold text-gray-800 mb-3 mt-5">Daftar Klub</h2>
-                <div id="club-list" class="grid grid-cols-2 gap-3 mb-6">
-                    <!-- Club cards will be rendered here -->
-                </div>
-            `;
-            
-            // Render daftar klub
-            renderClubList(CLUB_DATA);
-            
-            // Event listener untuk pencarian
-            document.getElementById('club-search').addEventListener('input', (e) => {
-                const query = e.target.value.toLowerCase();
-                const filteredClubs = CLUB_DATA.filter(club => club.nama_klub.toLowerCase().includes(query));
-                
-                // Tambahan filter untuk Pemain dan Official
-                const filteredPlayers = PLAYER_DATA.filter(p => p.nama_pemain.toLowerCase().includes(query) || p.nama_punggung.toLowerCase().includes(query));
-                const filteredOfficials = OFFICIAL_DATA.filter(o => o.nama_official.toLowerCase().includes(query) || o.jabatan.toLowerCase().includes(query));
-
-                // Jika query kosong, tampilkan semua klub
-                if (!query) {
-                    renderClubList(CLUB_DATA);
-                } else {
-                    // Jika ada hasil pencarian di pemain/official, tampilkan klub mereka
-                    const clubIdsFromPlayers = filteredPlayers.map(p => p.id_klub);
-                    const clubIdsFromOfficials = filteredOfficials.map(o => o.id_klub);
-                    const allRelevantIds = new Set([...filteredClubs.map(c => c.id_klub), ...clubIdsFromPlayers, ...clubIdsFromOfficials]);
-                    
-                    const finalClubs = CLUB_DATA.filter(c => allRelevantIds.has(c.id_klub));
-                    renderClubList(finalClubs);
-                }
-            });
-        }
-        
-        function renderClubList(clubs) {
-            const clubListEl = document.getElementById('club-list');
-            if (!clubListEl) return;
-            
-            clubListEl.innerHTML = clubs.map(club => `
-                <div class="bg-white p-4 rounded-xl shadow-md text-center cursor-pointer hover:bg-red-50 transition-all" onclick="showPage('klub-detail', true, '${club.id_klub}')">
-                    <img src="${club.logo_klub}" alt="Logo Klub" class="lazy-img w-16 h-16 mx-auto mb-2 rounded-full border border-gray-100 shadow-inner" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=Klub'">
-                    <p class="text-sm font-bold truncate">${club.nama_klub}</p>
-                    <p class="text-xs text-gray-500">${club.id_klub}</p>
-                </div>
-            `).join('');
-            
-            if (clubs.length === 0) {
-                 clubListEl.innerHTML = '<p class="col-span-2 text-center text-gray-500 mt-8">Tidak ada klub yang ditemukan.</p>';
-            }
-        }
-
-        function renderKlubDetail(container) {
-            const clubId = detailData['klub-detail'];
-            const club = CLUB_DATA.find(c => c.id_klub === clubId);
-            if (!club) {
-                container.innerHTML = '<p class="text-center text-red-500 mt-8">Data klub tidak ditemukan.</p>';
-                return;
-            }
-
-            const clubMatches = MATCH_DATA.filter(m => m.id_klub_home === clubId || m.id_klub_away === clubId);
-            const players = PLAYER_DATA.filter(p => p.id_klub === clubId);
-            const officials = OFFICIAL_DATA.filter(o => o.id_klub === clubId);
-            
-            container.innerHTML = `
-                <button onclick="showPage('klub', false)" class="text-red-500 mb-4 block"><i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar Klub</button>
-                
-                <div class="bg-white p-4 rounded-xl shadow-lg mb-6 text-center">
-                    <img src="${club.logo_klub}" alt="Logo Klub" class="lazy-img w-20 h-20 mx-auto mb-3 rounded-full border-4 border-red-500 shadow-xl" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=Klub'">
-                    <h1 class="text-2xl font-bold mb-1 text-gray-900">${club.nama_klub}</h1>
-                    <p class="text-sm text-gray-500 mb-3">${club.alamat_klub}</p>
-                    
-                    <div class="grid grid-cols-2 text-left text-sm mt-3 border-t pt-3">
-                        <p><strong class="font-semibold">Manajer:</strong> ${club.nama_manajer}</p>
-                        <p><strong class="font-semibold">Telp:</strong> ${club.no_telp_klub}</p>
-                    </div>
-                </div>
-
-                <h2 class="text-lg font-bold text-gray-800 mb-3">Rekap Match (${clubMatches.length} Pertandingan)</h2>
-                <div id="club-match-recap" class="space-y-3 mb-6">
-                    ${clubMatches.length > 0 ? clubMatches.map(m => renderMatchCardSimple(m, clubId)).join('') : '<p class="text-center text-gray-500">Belum ada data pertandingan.</p>'}
-                </div>
-
-                <!-- Tabs Pemain & Official -->
-                <div class="bg-white rounded-xl shadow-lg">
-                    <div class="flex border-b border-gray-100">
-                        <button id="tab-pemain" class="w-1/2 py-3 text-center font-bold text-red-500 border-b-2 border-red-500 transition-all" onclick="toggleClubDetailTab('pemain')">Pemain</button>
-                        <button id="tab-official" class="w-1/2 py-3 text-center font-bold text-gray-500 transition-all" onclick="toggleClubDetailTab('official')">Official</button>
-                    </div>
-                    <div id="tab-content-pemain" class="p-4 grid grid-cols-2 gap-3">
-                        ${players.length > 0 ? players.map(p => renderPlayerCard(p)).join('') : '<p class="col-span-2 text-center text-gray-500">Tidak ada data pemain.</p>'}
-                    </div>
-                    <div id="tab-content-official" class="p-4 grid grid-cols-2 gap-3 hidden">
-                        ${officials.length > 0 ? officials.map(o => renderOfficialCard(o)).join('') : '<p class="col-span-2 text-center text-gray-500">Tidak ada data official.</p>'}
-                    </div>
-                </div>
-            `;
-        }
-        
-        function renderMatchCardSimple(match, clubId) {
-            const isHome = match.id_klub_home === clubId;
-            const myScore = isHome ? match.goal_home : match.goal_away;
-            const opponentScore = isHome ? match.goal_away : match.goal_home;
-            const opponentName = isHome ? match.nama_klub_away : match.nama_klub_home;
-            const opponentLogo = isHome ? match.logo_klub_away : match.logo_klub_home;
-            const point = isHome ? match.poin_home : match.poin_away;
-            
-            const statusClass = match.isUpcoming ? 'bg-blue-100 text-blue-800' : 
-                                point === 3 ? 'bg-green-100 text-green-800' :
-                                point === 1 ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-red-100 text-red-800';
-                                
-            const statusText = match.isUpcoming ? 'Jadwal' :
-                                point === 3 ? 'Menang' :
-                                point === 1 ? 'Seri' :
-                                'Kalah';
-            
-            return `
-                <div class="bg-white p-3 rounded-xl shadow-md flex items-center justify-between transition-all">
-                    <div class="flex flex-col items-start w-5/12">
-                        <p class="text-xs text-gray-500 mb-1">${match.tanggal_match}</p>
-                        <p class="text-sm font-semibold truncate">vs ${opponentName}</p>
-                    </div>
-                    
-                    <div class="flex items-center justify-center w-2/12 font-bold text-lg">
-                        ${match.isUpcoming ? '-' : `${myScore}:${opponentScore}`}
-                    </div>
-                    
-                    <div class="w-5/12 flex flex-col items-end">
-                        <span class="text-xs font-semibold px-2 py-0.5 rounded-full ${statusClass}">${statusText}</span>
-                        ${!match.isUpcoming ? `<p class="text-xs text-gray-600 mt-1">Poin: ${point}</p>` : `<p class="text-xs text-gray-600 mt-1">${match.jam}</p>`}
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderPlayerCard(player) {
-            const age = calculateAge(player.tanggal_lahir);
-            return `
-                <div class="bg-gray-50 p-3 rounded-xl shadow-sm text-center border border-gray-100">
-                    <img src="${player.pas_photo_pemain}" alt="Foto Pemain" class="lazy-img w-16 h-16 mx-auto mb-2 rounded-full object-cover" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=Pemain'">
-                    <p class="text-sm font-bold truncate">${player.nama_pemain}</p>
-                    <p class="text-xs text-gray-600">No. ${player.no_punggung} (${player.nama_punggung})</p>
-                    <p class="text-xs text-red-500 font-semibold">${player.posisi} (${age} Thn)</p>
-                </div>
-            `;
-        }
-
-        function renderOfficialCard(official) {
-            const age = calculateAge(official.tanggal_lahir);
-            return `
-                <div class="bg-gray-50 p-3 rounded-xl shadow-sm text-center border border-gray-100">
-                    <img src="${official.pas_photo_official}" alt="Foto Official" class="lazy-img w-16 h-16 mx-auto mb-2 rounded-full object-cover" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=Official'">
-                    <p class="text-sm font-bold truncate">${official.nama_official}</p>
-                    <p class="text-xs text-red-500 font-semibold">${official.jabatan} (${age} Thn)</p>
-                </div>
-            `;
-        }
-
-        function toggleClubDetailTab(activeTab) {
-            const tabs = ['pemain', 'official'];
-            tabs.forEach(tab => {
-                const tabBtn = document.getElementById(`tab-${tab}`);
-                const tabContent = document.getElementById(`tab-content-${tab}`);
-                if (tab === activeTab) {
-                    tabBtn.classList.add('text-red-500', 'border-b-2', 'border-red-500');
-                    tabBtn.classList.remove('text-gray-500', 'border-b-0');
-                    tabContent.classList.remove('hidden');
-                } else {
-                    tabBtn.classList.remove('text-red-500', 'border-b-2', 'border-red-500');
-                    tabBtn.classList.add('text-gray-500', 'border-b-0');
-                    tabContent.classList.add('hidden');
-                }
-            });
-        }
-
-
-        // ====================================================================
-        // 8. RENDER TENTANG
-        // ====================================================================
-
-        function renderTentang(container) {
-            container.innerHTML = `
-                <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
-                    <h1 class="text-xl font-bold mb-4 text-center text-red-600">${ABOUT_DATA.nama_organisasi}</h1>
-                    <p class="text-sm text-gray-500 text-center mb-6">Berdiri sejak: ${ABOUT_DATA.tanggal_berdiri}</p>
-                    
-                    <div class="space-y-4">
-                        <div class="border-l-4 border-red-500 pl-3">
-                            <p class="text-lg font-semibold text-gray-800">Visi</p>
-                            <p class="text-gray-700">${ABOUT_DATA.visi}</p>
-                        </div>
-                        <div class="border-l-4 border-red-500 pl-3">
-                            <p class="text-lg font-semibold text-gray-800">Misi</p>
-                            <p class="text-gray-700">${ABOUT_DATA.misi}</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-lg mb-6">
-                    <h2 class="text-lg font-bold mb-4 text-gray-800">Struktur Organisasi</h2>
-                    <dl class="space-y-3">
-                        ${Object.entries(ABOUT_DATA).filter(([key]) => ['ketua', 'wakil_ketua', 'sekretaris', 'bendahara', 'humas', 'media'].includes(key)).map(([key, value]) => `
-                            <div class="flex justify-between items-center border-b pb-2">
-                                <dt class="text-sm font-semibold capitalize text-gray-600">${key.replace('_', ' ')}</dt>
-                                <dd class="text-base font-medium text-gray-900">${value}</dd>
-                            </div>
-                        `).join('')}
-                    </dl>
-                </div>
-                
-                <a href="${ADMIN_LOGIN_URL}" target="_blank" class="w-full inline-flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all">
-                    <i class="fas fa-sign-in-alt mr-2"></i>
-                    Login Admin
-                </a>
-            `;
-        }
-
-
-        // ====================================================================
-        // 9. RENDER KOMPONEN UMUM
-        // ====================================================================
-
         function renderSearchBar(id, placeholder) {
             return `
                 <div class="relative mt-2 mb-4">
@@ -2100,19 +1651,613 @@
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
             `;
+        } 
+
+        // ====================================================================
+        // 6. RENDER HOME (Berita)
+        // ====================================================================
+        
+        let slideInterval; 
+        
+        function openNewsModal(newsId) {
+            const news = NEWS_DATA.find(n => n.id_berita === newsId);
+            if (!news) return;
+
+            const modalContent = document.getElementById('news-modal-content');
+            modalContent.innerHTML = `
+                <h2 class="text-xl font-bold mb-3 text-gray-800">${news.Judul_berita}</h2>
+                <p class="text-xs text-gray-500 mb-4"><i class="fas fa-calendar-alt mr-1"></i> ${news.tanggal}</p>
+                <div class="space-y-4">
+                    ${news.gambar_1 ? `<img src="${news.gambar_1}" alt="Gambar Berita 1" class="lazy-img w-full rounded-lg shadow-md" onerror="this.style.display='none'">` : ''}
+                    <p class="text-base text-gray-700 leading-relaxed whitespace-pre-line">${news.isi_berita}</p>
+                    ${news.gambar_2 ? `<img src="${news.gambar_2}" alt="Gambar Berita 2" class="lazy-img w-full rounded-lg shadow-md" onerror="this.style.display='none'">` : ''}
+                    ${news.gambar_3 ? `<img src="${news.gambar_3}" alt="Gambar Berita 3" class="lazy-img w-full rounded-lg shadow-md" onerror="this.style.display='none'">` : ''}
+                </div>
+                <button onclick="closeModal('news-modal')" class="mt-6 w-full py-2 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-all">Tutup</button>
+            `;
+
+            document.getElementById('news-modal').classList.remove('hidden');
+        }
+
+        function renderNewsList(newsArray, elementId) {
+            const listEl = document.getElementById(elementId);
+            if (!listEl) return;
+
+            listEl.innerHTML = newsArray.map(news => `
+                <div onclick="openNewsModal('${news.id_berita}')" class="flex items-start p-3 bg-white rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer space-x-3">
+                    <img src="${news.gambar_1}" alt="${news.Judul_berita}" class="lazy-img w-20 h-20 flex-shrink-0 object-cover rounded-lg" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=News'">
+                    <div class="flex-grow">
+                        <h3 class="text-sm font-bold text-gray-800 line-clamp-2">${news.Judul_berita}</h3>
+                        <p class="text-xs text-gray-500 mt-1"><i class="fas fa-calendar-alt mr-1"></i> ${news.tanggal}</p>
+                        <p class="text-xs text-gray-600 mt-2 line-clamp-2">${news.isi_berita.substring(0, 80)}...</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function renderHome(container) { 
+            // Hentikan slider lama
+            if (slideInterval) clearInterval(slideInterval);
+            
+            // Filter berita dengan gambar untuk slider
+            const sliderNews = SORTED_NEWS.filter(n => n.gambar_1).slice(0, 3);
+            let currentSlide = 0;
+
+            const sliderHtml = sliderNews.length > 0 ? `
+                <div id="news-slider" class="relative w-full overflow-hidden rounded-xl shadow-lg mb-6">
+                    <div id="slider-track" class="flex transition-transform duration-500 ease-in-out">
+                        ${sliderNews.map(news => `
+                            <div class="w-full flex-shrink-0" onclick="openNewsModal('${news.id_berita}')">
+                                <img src="${news.gambar_1}" alt="${news.Judul_berita}" class="lazy-img w-full h-40 object-cover" onerror="this.src='https://placehold.co/600x200/e2e8f0/64748b?text=PSSI'">
+                                <div class="absolute inset-x-0 bottom-0 bg-black bg-opacity-50 p-3">
+                                    <h3 class="text-sm font-bold text-white line-clamp-2">${news.Judul_berita}</h3>
+                                    <p class="text-xs text-gray-300">${news.tanggal}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div id="slider-dots" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                        ${sliderNews.map((_, index) => `<span class="dot w-2 h-2 rounded-full bg-white opacity-50 transition-opacity" data-index="${index}"></span>`).join('')}
+                    </div>
+                </div>
+            ` : '<div class="h-40 bg-gray-200 rounded-xl shadow-lg flex items-center justify-center mb-6"><p class="text-gray-500">Tidak ada berita terbaru.</p></div>';
+
+            container.innerHTML = `
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-bullhorn text-red-500 text-2xl"></i>
+                    <h2 class="text-xl font-bold text-gray-800">Berita Terbaru</h2>
+                </div>
+                ${sliderHtml}
+                
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-list-alt text-red-500 text-2xl"></i>
+                    <h2 class="text-xl font-bold text-gray-800">Daftar Berita</h2>
+                </div>
+                <div id="news-list" class="space-y-3">
+                    </div>
+                <div class="flex justify-center mt-6">
+                    <a href="#" class="px-4 py-2 text-sm font-semibold text-red-500 border border-red-500 rounded-full hover:bg-red-50 transition-all">Lihat Semua Berita</a>
+                </div>
+            `;
+
+            renderNewsList(SORTED_NEWS, 'news-list');
+            
+            // Slider Logic
+            if (sliderNews.length > 0) {
+                const sliderTrack = document.getElementById('slider-track');
+                const dots = document.querySelectorAll('#slider-dots .dot');
+
+                const updateSlider = (index) => {
+                    sliderTrack.style.transform = `translateX(-${index * 100}%)`;
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('opacity-100', i === index);
+                        dot.classList.toggle('opacity-50', i !== index);
+                    });
+                    currentSlide = index;
+                };
+
+                const nextSlide = () => {
+                    let next = (currentSlide + 1) % sliderNews.length;
+                    updateSlider(next);
+                };
+
+                // Initial render
+                updateSlider(0);
+                
+                // Start auto-slide
+                slideInterval = setInterval(nextSlide, 5000); 
+
+                dots.forEach(dot => {
+                    dot.addEventListener('click', () => {
+                        clearInterval(slideInterval);
+                        updateSlider(parseInt(dot.dataset.index));
+                        slideInterval = setInterval(nextSlide, 5000);
+                    });
+                });
+            }
         }
 
         // ====================================================================
-        // 10. INISIALISASI
+        // 7. RENDER JADWAL (Match/Fixture)
+        // ====================================================================
+        
+        let countdownInterval; 
+        function renderJadwal(container) { 
+            clearInterval(countdownInterval); // Hentikan countdown lama
+            
+            const uniqueCompetitions = [...new Set(MATCH_DATA.map(m => m.nama_kompetisi))];
+            
+            const competitionTabsHtml = uniqueCompetitions.map((comp, index) => {
+                return `<button class="competition-tab flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-full transition-all ${index === 0 ? 'bg-red-500 text-white shadow-md' : 'bg-gray-100 text-gray-600'}" 
+                                data-comp="${comp}" onclick="filterMatchesByComp(this, \`${comp}\`)">
+                            ${comp}
+                        </button>`;
+            }).join('');
+
+            container.innerHTML = `
+                <h1 class="text-2xl font-bold mb-4 text-gray-800">Jadwal & Hasil Pertandingan</h1>
+                
+                ${uniqueCompetitions.length > 0 ? `
+                    <div class="flex space-x-2 overflow-x-auto pb-3 sticky-tabs border-b border-gray-200">
+                        ${competitionTabsHtml}
+                    </div>
+                    
+                    <div id="babak-tabs-container" class="flex space-x-2 overflow-x-auto pb-3 mt-2 mb-4">
+                        </div>
+
+                    <div id="filtered-matches-list" class="space-y-4">
+                        </div>
+                ` : '<p class="text-center text-gray-500 mt-8">Tidak ada data pertandingan yang ditemukan.</p>'}
+            `;
+
+            if (uniqueCompetitions.length > 0) {
+                // Tampilkan tab babak untuk kompetisi pertama
+                filterMatchesByComp(document.querySelector('.competition-tab'), uniqueCompetitions[0]);
+            }
+        }
+        
+        function filterMatchesByComp(el, compName) {
+            document.querySelectorAll('.competition-tab').forEach(btn => {
+                btn.classList.remove('bg-red-500', 'text-white', 'shadow-md');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            el.classList.add('bg-red-500', 'text-white', 'shadow-md');
+            el.classList.remove('bg-gray-100', 'text-gray-600');
+
+            const competitionMatches = MATCH_DATA.filter(m => m.nama_kompetisi === compName);
+            const uniqueBabak = [...new Set(competitionMatches.map(m => m.babak_pertandingan))];
+            
+            const babakTabsContainer = document.getElementById('babak-tabs-container');
+            babakTabsContainer.innerHTML = uniqueBabak.map((babak, index) => `
+                <button class="babak-tab flex-shrink-0 px-4 py-2 text-xs font-semibold rounded-full transition-all ${index === 0 ? 'bg-red-500 text-white' : 'bg-gray-100 text-gray-600'}" 
+                        data-babak="${babak}" onclick="filterMatchesByBabak(this, \`${babak}\`, \`${compName}\`)">
+                    ${babak}
+                </button>
+            `).join('');
+
+            if (uniqueBabak.length > 0) { 
+                filterMatchesByBabak(document.querySelector('.babak-tab'), uniqueBabak[0], compName); 
+            } 
+        }
+        
+        function filterMatchesByBabak(el, babak, compName) { 
+            document.querySelectorAll('.babak-tab').forEach(btn => { 
+                btn.classList.remove('bg-red-500', 'text-white'); 
+                btn.classList.add('bg-gray-100', 'text-gray-600'); 
+            });
+            el.classList.add('bg-red-500', 'text-white'); 
+            el.classList.remove('bg-gray-100', 'text-gray-600'); 
+            
+            const filteredMatches = MATCH_DATA.filter(m => m.nama_kompetisi === compName && m.babak_pertandingan === babak); 
+            renderMatchList(filteredMatches, 'filtered-matches-list');
+        }
+        
+        function renderMatchList(matches, elementId) { 
+            clearInterval(countdownInterval); // Hentikan countdown lama 
+            const listEl = document.getElementById(elementId); 
+            if (!listEl) return;
+            
+            // Sort: Upcoming first, then by date descending 
+            matches.sort((a, b) => { 
+                if (a.isUpcoming && !b.isUpcoming) return -1; 
+                if (!a.isUpcoming && b.isUpcoming) return 1; 
+                return b.dateTime - a.dateTime; 
+            });
+            
+            listEl.innerHTML = matches.map(match => { 
+                // Tentukan status dan tampilan awal
+                const isCompleted = match.dateTime.getTime() < new Date().getTime() - (1000 * 60 * 90);
+                
+                let statusHtml = '';
+                let cardClass = 'border-gray-200 border bg-white'; 
+                
+                if (isCompleted) {
+                    statusHtml = `<div class="text-2xl font-black text-red-500">${match.goal_home} - ${match.goal_away}</div><div class="text-xs text-gray-500">SELESAI</div>`;
+                } else {
+                    cardClass = 'border-blue-500 border-2 bg-blue-50';
+                    statusHtml = `<div class="text-xs font-semibold text-blue-500 mb-2 match-status-title">JADWAL (${match.tanggal_match} ${match.jam})</div><div id="countdown-${match.id_match}" class="text-sm font-bold text-gray-700"></div>`;
+                }
+                
+                return ` 
+                    <div class="p-4 rounded-xl shadow-lg ${cardClass} flex flex-col space-y-3 match-card" data-match-id="${match.id_match}" data-is-upcoming="${match.isUpcoming}">
+                        <div class="text-xs text-center font-medium text-gray-500 mb-2">${match.lokasi}</div>
+                        <div class="flex justify-between items-center">
+                            <div class="w-1/3 text-center">
+                                <img src="${match.logo_klub_home}" alt="Home Logo" class="lazy-img w-10 h-10 mx-auto mb-1 rounded-full border border-gray-200" onerror="this.src='https://placehold.co/40x40/e2e8f0/64748b?text=Klub'">
+                                <span class="text-sm font-semibold">${match.nama_klub_home}</span>
+                            </div>
+                            <div class="w-1/3 text-center match-status-container">
+                                ${statusHtml}
+                            </div>
+                            <div class="w-1/3 text-center">
+                                <img src="${match.logo_klub_away}" alt="Away Logo" class="lazy-img w-10 h-10 mx-auto mb-1 rounded-full border border-gray-200" onerror="this.src='https://placehold.co/40x40/e2e8f0/64748b?text=Klub'">
+                                <span class="text-sm font-semibold">${match.nama_klub_away}</span>
+                            </div>
+                        </div>
+                        <button onclick="showPage('match-detail', true, '${match.id_match}')" class="text-xs font-medium text-red-500 hover:text-red-600 transition-all pt-2 border-t mt-3">
+                            Lihat Detail Match <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                        </button>
+                    </div> 
+                `;
+            }).join('');
+            
+            // Mulai countdown hanya jika ada pertandingan yang akan datang
+            if (matches.filter(m => m.isUpcoming).length > 0) {
+                countdownInterval = setInterval(updateCountdown, 1000);
+            }
+        }
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            document.querySelectorAll('.match-card[data-is-upcoming="true"]').forEach(cardEl => {
+                const matchId = cardEl.dataset.matchId;
+                const match = MATCH_DATA.find(m => m.id_match === matchId);
+                const countdownEl = document.getElementById(`countdown-${matchId}`);
+                const statusContainer = cardEl.querySelector('.match-status-container');
+                if (!match || !statusContainer) return;
+                
+                const distance = match.dateTime.getTime() - now;
+
+                if (distance < -(1000 * 60 * 90)) { // Selesai
+                    cardEl.dataset.isUpcoming = "false";
+                    cardEl.classList.remove('border-blue-500', 'bg-blue-50', 'border-orange-500', 'bg-orange-50');
+                    cardEl.classList.add('border-gray-200', 'border', 'bg-white');
+                    statusContainer.innerHTML = `<div class="text-2xl font-black text-red-500">${match.goal_home || 0} - ${match.goal_away || 0}</div><div class="text-xs text-gray-500">SELESAI</div>`;
+                } else if (distance < 0) { // Sedang Berlangsung (Dalam 90 menit)
+                    cardEl.classList.remove('border-blue-500', 'bg-blue-50');
+                    cardEl.classList.add('border-orange-500', 'border-2', 'bg-orange-50');
+                    statusContainer.innerHTML = `<div class="text-sm font-black text-orange-600">SEDANG BERLANGSUNG</div><div class="text-xs text-gray-500">(${match.jam})</div>`;
+                } else {
+                    // Masih Akan Datang
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    if (countdownEl) {
+                        countdownEl.innerHTML = `${days} H ${pad(hours)} J ${pad(minutes)} M ${pad(seconds)} D`;
+                    }
+                }
+            });
+        }
+        
+        // ==================================================================== 
+        // 8. RENDER KLASEMEN (Standings) 
+        // ==================================================================== 
+        
+        function renderKlasemen(container) {
+            clearInterval(countdownInterval); // Stop any running countdown
+            
+            const uniqueRounds = Object.keys(STANDINGS_DATA);
+
+            container.innerHTML = `
+                <h1 class="text-2xl font-bold mb-4 text-gray-800">Klasemen Sementara</h1>
+                
+                ${uniqueRounds.length > 0 ? `
+                    <div class="flex space-x-2 overflow-x-auto pb-3 sticky-tabs border-b border-gray-200">
+                        ${uniqueRounds.map((round, index) => `
+                            <button class="babak-klasemen-tab flex-shrink-0 px-4 py-2 text-sm font-semibold rounded-full transition-all ${index === 0 ? 'bg-red-500 text-white shadow-md' : 'bg-gray-100 text-gray-600'}" 
+                                    data-round="${round}" onclick="filterKlasemenByBabak(this, \`${round}\`)">
+                                ${round}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="klasemen-table-container" class="bg-white rounded-xl shadow-lg overflow-x-auto mt-4">
+                        </div>
+                ` : '<p class="text-center text-gray-500 mt-8">Tidak ada data klasemen yang ditemukan.</p>'}
+            `;
+
+            if (uniqueRounds.length > 0) {
+                // Atur tab pertama aktif
+                document.querySelector('.babak-klasemen-tab').classList.add('bg-red-500', 'text-white', 'shadow-md');
+                document.querySelector('.babak-klasemen-tab').classList.remove('bg-gray-100', 'text-gray-600');
+                renderStandingsTable(STANDINGS_DATA[uniqueRounds[0]]);
+            }
+        }
+
+        function filterKlasemenByBabak(el, round) {
+            document.querySelectorAll('.babak-klasemen-tab').forEach(btn => {
+                btn.classList.remove('bg-red-500', 'text-white', 'shadow-md');
+                btn.classList.add('bg-gray-100', 'text-gray-600');
+            });
+            el.classList.add('bg-red-500', 'text-white', 'shadow-md');
+            el.classList.remove('bg-gray-100', 'text-gray-600');
+            
+            renderStandingsTable(STANDINGS_DATA[round]);
+        }
+
+        function renderStandingsTable(standings) {
+            const tableContainer = document.getElementById('klasemen-table-container');
+            if (!tableContainer) return;
+
+            tableContainer.innerHTML = `
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-3 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[5%]">#</th>
+                            <th class="px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider w-[40%]">Klub</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">P</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">M</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">S</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">K</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">GD</th>
+                            <th class="px-3 py-3 text-center text-xs font-bold text-gray-500 uppercase tracking-wider w-[10%]">PTS</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        ${standings.map((team, index) => `
+                            <tr class="hover:bg-gray-50 cursor-pointer transition-colors" onclick="showPage('klub-detail', true, '${team.id_klub}')">
+                                <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-center text-gray-900">${index + 1}</td>
+                                <td class="px-6 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <img src="${team.logo_klub}" alt="Logo" class="w-6 h-6 rounded-full mr-2 lazy-img" onerror="this.src='https://placehold.co/24x24/e2e8f0/64748b?text=K'">
+                                        <span class="text-sm font-semibold text-gray-900">${team.nama_klub}</span>
+                                    </div>
+                                </td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center text-gray-700">${team.P}</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center text-green-600 font-medium">${team.W}</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center text-yellow-600 font-medium">${team.D}</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center text-red-600 font-medium">${team.L}</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center font-bold ${team.GD > 0 ? 'text-green-600' : (team.GD < 0 ? 'text-red-600' : 'text-gray-700')}">${team.GD}</td>
+                                <td class="px-3 py-3 whitespace-nowrap text-sm text-center font-black text-red-500">${team.PTS}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // ====================================================================
+        // 9. RENDER KLUB
+        // ====================================================================
+        
+        function renderKlub(container) {
+            // Restore generic header
+            renderHeader();
+            container.innerHTML = `
+                <h1 class="text-2xl font-bold mb-4 text-gray-800">Daftar Klub Peserta</h1>
+                ${renderSearchBar('club-search', 'Cari nama klub...')}
+                <div id="club-list" class="space-y-3">
+                    </div>
+            `;
+            renderClubList(CLUB_DATA, 'club-list');
+            
+            document.getElementById('club-search').addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filteredClubs = CLUB_DATA.filter(club => 
+                    club.nama_klub.toLowerCase().includes(query)
+                );
+                renderClubList(filteredClubs, 'club-list');
+            });
+        }
+        
+        function renderClubList(clubs, elementId) {
+            const listEl = document.getElementById(elementId);
+            if (!listEl) return;
+
+            listEl.innerHTML = clubs.map(club => `
+                <div onclick="showPage('klub-detail', true, '${club.id_klub}')" class="flex items-center p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all cursor-pointer">
+                    <img src="${club.logo_klub}" alt="${club.nama_klub} Logo" class="lazy-img w-12 h-12 flex-shrink-0 object-cover rounded-full border border-gray-200" onerror="this.src='https://placehold.co/48x48/e2e8f0/64748b?text=Klub'">
+                    <div class="ml-4 flex-grow">
+                        <h3 class="text-lg font-bold text-gray-800">${club.nama_klub}</h3>
+                        <p class="text-sm text-gray-500">${club.alamat_klub || 'Alamat Tidak Diketahui'}</p>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400 ml-4"></i>
+                </div>
+            `).join('');
+        }
+        
+        // ====================================================================
+        // 10. RENDER DETAIL KLUB DAN MATCH
+        // ====================================================================
+
+        function renderKlubDetail(container, clubId) {
+            // Modify header for detail page
+            document.getElementById('app-header').innerHTML = `
+                <button id="back-button" class="text-gray-600 hover:text-red-500 transition-all mr-3">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <h1 class="text-lg font-bold text-gray-800 truncate">Detail Klub</h1>
+            `;
+            
+            const club = CLUB_DATA.find(c => c.id_klub === clubId);
+            const players = PLAYER_DATA.filter(p => p.id_klub === clubId);
+            const matches = MATCH_DATA.filter(m => m.id_klub_home === clubId || m.id_klub_away === clubId);
+            
+            if (!club) {
+                container.innerHTML = '<p class="text-center text-red-500 mt-8">Klub tidak ditemukan.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
+                    <img src="${club.logo_klub}" alt="${club.nama_klub} Logo" class="lazy-img w-24 h-24 mx-auto mb-4 rounded-full border-4 border-red-500 shadow-md" onerror="this.src='https://placehold.co/96x96/e2e8f0/64748b?text=Klub'">
+                    <h1 class="text-3xl font-black text-gray-900">${club.nama_klub}</h1>
+                    <p class="text-sm text-gray-600 mt-2"><i class="fas fa-user-tie mr-1"></i> Manajer: ${club.nama_manajer || 'N/A'}</p>
+                    <p class="text-sm text-gray-600"><i class="fas fa-map-marker-alt mr-1"></i> Alamat: ${club.alamat_klub || 'N/A'}</p>
+                </div>
+
+                <h2 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-users mr-2 text-red-500"></i> Daftar Pemain (${players.length})</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+                    ${players.length > 0 ? players.map(player => `
+                        <div class="bg-white rounded-xl shadow-md p-3 text-center transition-all hover:shadow-lg">
+                            <img src="${player.pas_photo_pemain}" alt="${player.nama_pemain}" class="lazy-img w-16 h-16 mx-auto rounded-full object-cover border-2 border-gray-200" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=P'">
+                            <p class="text-xs font-bold text-gray-800 mt-2 truncate">${player.nama_punggung || player.nama_pemain}</p>
+                            <p class="text-xs text-gray-500">${player.posisi} (#${player.no_punggung})</p>
+                            <p class="text-xs text-gray-500">${calculateAge(player.tanggal_lahir)} thn</p>
+                        </div>
+                    `).join('') : '<div class="col-span-2 sm:col-span-3 text-center py-4 text-gray-500 bg-white rounded-xl shadow-md">Tidak ada data pemain.</div>'}
+                </div>
+                
+                <h2 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-futbol mr-2 text-red-500"></i> Riwayat Pertandingan (${matches.length})</h2>
+                <div id="club-match-list" class="space-y-3">
+                     </div>
+            `;
+            
+            // Render riwayat pertandingan klub (tanpa memulai interval countdown baru)
+            const clubMatchListEl = document.getElementById('club-match-list');
+            if(clubMatchListEl) {
+                // Hentikan countdown global sementara untuk tampilan riwayat klub agar tidak duplikasi.
+                clearInterval(countdownInterval); 
+                renderMatchList(matches, 'club-match-list');
+                // Hapus countdown interval yang mungkin baru dibuat di renderMatchList
+                clearInterval(countdownInterval);
+                // Matikan data-is-upcoming karena ini adalah riwayat/detail, bukan daftar utama.
+                document.querySelectorAll('#club-match-list .match-card').forEach(card => card.removeAttribute('data-is-upcoming'));
+            }
+        }
+
+        function renderMatchDetail(container, matchId) {
+            // Modify header for detail page
+            document.getElementById('app-header').innerHTML = `
+                <button id="back-button" class="text-gray-600 hover:text-red-500 transition-all mr-3">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <h1 class="text-lg font-bold text-gray-800 truncate">Detail Pertandingan</h1>
+            `;
+            
+            const match = MATCH_DATA.find(m => m.id_match === matchId);
+            
+            if (!match) {
+                container.innerHTML = '<p class="text-center text-red-500 mt-8">Pertandingan tidak ditemukan.</p>';
+                return;
+            }
+            
+            const dateFormatted = new Intl.DateTimeFormat('id-ID', { 
+                weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+            }).format(match.dateTime);
+            
+            const isCompleted = match.dateTime.getTime() < new Date().getTime() - (1000 * 60 * 90); // Passed 90 min buffer
+            const resultColor = isCompleted ? (match.goal_home > match.goal_away ? 'text-green-600' : (match.goal_home < match.goal_away ? 'text-red-600' : 'text-gray-600')) : 'text-gray-500';
+            
+            container.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
+                    <h1 class="text-xl font-bold text-gray-800 mb-2">${match.nama_kompetisi}</h1>
+                    <h2 class="text-base text-red-500 font-semibold mb-4">${match.babak_pertandingan}</h2>
+
+                    <p class="text-sm text-gray-600 mb-1"><i class="fas fa-calendar-day mr-1"></i> ${dateFormatted}, ${match.jam}</p>
+                    <p class="text-sm text-gray-600 mb-4"><i class="fas fa-map-marker-alt mr-1"></i> ${match.lokasi}</p>
+
+                    <div class="flex justify-around items-center space-x-4">
+                        <div class="w-1/3 flex flex-col items-center">
+                            <img src="${match.logo_klub_home}" alt="Home Logo" class="lazy-img w-16 h-16 rounded-full border-2 border-gray-200 mb-2" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=Klub'">
+                            <span class="text-base font-bold text-gray-900">${match.nama_klub_home}</span>
+                        </div>
+                        
+                        <div class="w-1/3 text-center">
+                            <div class="text-4xl font-black ${resultColor}">
+                                ${isCompleted ? `${match.goal_home || 0} - ${match.goal_away || 0}` : 'VS'}
+                            </div>
+                            <div class="text-xs text-gray-500 font-medium mt-1">
+                                ${isCompleted ? 'SKOR AKHIR' : 'JADWAL'}
+                            </div>
+                        </div>
+
+                        <div class="w-1/3 flex flex-col items-center">
+                            <img src="${match.logo_klub_away}" alt="Away Logo" class="lazy-img w-16 h-16 rounded-full border-2 border-gray-200 mb-2" onerror="this.src='https://placehold.co/64x64/e2e8f0/64748b?text=Klub'">
+                            <span class="text-base font-bold text-gray-900">${match.nama_klub_away}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-trophy mr-2 text-red-500"></i> Rangkuman Pertandingan</h2>
+                <div class="bg-white rounded-xl shadow-lg p-4 divide-y divide-gray-100">
+                    <div class="flex justify-between py-2">
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.kartu_kuning_home || 0}</div>
+                        <div class="w-1/3 text-center text-sm text-gray-600"><i class="fas fa-square text-yellow-500 mr-1"></i> Kartu Kuning</div>
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.kartu_kuning_away || 0}</div>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.kartu_merah_home || 0}</div>
+                        <div class="w-1/3 text-center text-sm text-gray-600"><i class="fas fa-square text-red-500 mr-1"></i> Kartu Merah</div>
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.kartu_merah_away || 0}</div>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.goal_home || 0}</div>
+                        <div class="w-1/3 text-center text-sm text-gray-600"><i class="fas fa-futbol mr-1 text-green-500"></i> Gol</div>
+                        <div class="w-1/3 text-center text-sm font-semibold">${match.goal_away || 0}</div>
+                    </div>
+                    <div class="flex justify-between py-2">
+                        <div class="w-1/3 text-center text-xs text-gray-500">${match.keterangan_goal_home || '-'}</div>
+                        <div class="w-1/3 text-center text-xs text-gray-600">Pencetak Gol</div>
+                        <div class="w-1/3 text-center text-xs text-gray-500">${match.keterangan_goal_away || '-'}</div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-center mt-6">
+                    <a href="#" onclick="goBack(); return false;" class="px-4 py-2 text-sm font-semibold text-gray-700 border border-gray-300 rounded-full hover:bg-gray-100 transition-all">Kembali ke Daftar Pertandingan</a>
+                </div>
+            `;
+        }
+
+        // ====================================================================
+        // 11. RENDER TENTANG
+        // ====================================================================
+
+        function renderTentang(container) {
+            // Restore generic header
+            renderHeader();
+            
+            container.innerHTML = `
+                <div class="bg-white rounded-xl shadow-lg p-6 text-center mb-6">
+                    <img src="${HEADER_DATA.logo_pssi}" alt="Logo PSSI" class="w-20 h-20 mx-auto mb-4 rounded-full shadow-lg border-2 border-red-500" onerror="this.src='https://placehold.co/80x80/e2e8f0/64748b?text=PSSI'">
+                    <h1 class="text-2xl font-black text-gray-900 mb-2">${HEADER_DATA.Judul_kepala}</h1>
+                    <p class="text-sm text-gray-600">Sistem Informasi PSSI Askab Kepulauan Mentawai (SIPAKEM)</p>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-info-circle mr-2 text-red-500"></i> Tujuan Aplikasi</h2>
+                    <p class="text-base text-gray-700">SIPAKEM dibuat untuk menyediakan informasi yang akurat dan terkini mengenai data pertandingan, klasemen, dan detail klub peserta kompetisi di bawah naungan PSSI Kepulauan Mentawai.</p>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-3"><i class="fas fa-code mr-2 text-red-500"></i> Informasi Teknis</h2>
+                    <ul class="space-y-2 text-gray-700 text-sm">
+                        <li><i class="fas fa-database mr-2 text-gray-500"></i> Sumber Data: Admin.SIPAKEM PSSI Mentawai</li>
+                        <li><i class="fas fa-desktop mr-2 text-gray-500"></i> Frontend: Makmur Hidayat </li>
+                        <li><i class="fas fa-palette mr-2 text-gray-500"></i> Design: Rinaldi Kaslan</li>
+                    </ul>
+                </div>
+                
+                <div class="flex justify-center mt-6">
+                    <a href="https://hamudhabibi2025.github.io/nbxevwinrrhcuerhmgr/" target="_blank" class="flex justify-center items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Login Admin
+                    </a>
+                </div>
+            `;
+        }
+
+        // ====================================================================
+        // 12. INISIALISASI
         // ====================================================================
 
         window.onload = () => {
             renderHeader();
             // Tampilkan halaman awal
-            showPage('home', false);
+            showPage('home', false); 
         };
-
     </script>
-
 </body>
 </html>
